@@ -1,7 +1,7 @@
 package com.learner.learndroid.entity.trending;
 
 /**
- * Created by Venkat on 01/12/18.
+ * Gift Options
  */
 
 public class GiftOptions {

@@ -1,140 +1,208 @@
 package com.learner.learndroid.entity.trending;
 
-import java.util.List;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
+@Entity
 public class Item {
 
+    @PrimaryKey
     @SerializedName("itemId")
     @Expose
     private Integer itemId;
+
+    @ColumnInfo(name="parentItemId")
     @SerializedName("parentItemId")
     @Expose
     private Integer parentItemId;
+
     @SerializedName("name")
     @Expose
+    @ColumnInfo(name="name")
     private String name;
+
+    @ColumnInfo(name = "msrp")
     @SerializedName("msrp")
     @Expose
     private Double msrp;
+
+    @ColumnInfo(name = "salePrice")
     @SerializedName("salePrice")
     @Expose
     private Double salePrice;
+
+    @ColumnInfo(name = "upc")
     @SerializedName("upc")
     @Expose
     private String upc;
+
+    @Ignore
     @SerializedName("categoryPath")
     @Expose
     private String categoryPath;
+
     @SerializedName("shortDescription")
     @Expose
+    @ColumnInfo(name = "shortDescription")
     private String shortDescription;
+
+    @ColumnInfo(name = "longDescription")
     @SerializedName("longDescription")
     @Expose
     private String longDescription;
+
+    @Ignore
     @SerializedName("brandName")
     @Expose
     private String brandName;
+
+    @ColumnInfo(name = "thumbnailImage")
     @SerializedName("thumbnailImage")
     @Expose
     private String thumbnailImage;
+
+    @ColumnInfo(name = "mediumImage")
     @SerializedName("mediumImage")
     @Expose
     private String mediumImage;
+
+    @ColumnInfo(name = "largeImage")
     @SerializedName("largeImage")
     @Expose
     private String largeImage;
+
+    @Ignore
     @SerializedName("productTrackingUrl")
     @Expose
     private String productTrackingUrl;
+    @Ignore
     @SerializedName("ninetySevenCentShipping")
     @Expose
     private Boolean ninetySevenCentShipping;
+    @Ignore
     @SerializedName("standardShipRate")
     @Expose
     private Double standardShipRate;
+    @Ignore
     @SerializedName("color")
     @Expose
     private String color;
+    @Ignore
     @SerializedName("marketplace")
     @Expose
     private Boolean marketplace;
+    @Ignore
     @SerializedName("modelNumber")
     @Expose
     private String modelNumber;
+    @Ignore
     @SerializedName("sellerInfo")
     @Expose
     private String sellerInfo;
+    @Ignore
     @SerializedName("productUrl")
     @Expose
     private String productUrl;
+
+    @ColumnInfo(name = "customerRating")
     @SerializedName("customerRating")
     @Expose
     private String customerRating;
+
+    @ColumnInfo(name = "numReviews")
     @SerializedName("numReviews")
     @Expose
     private Integer numReviews;
+
+    @ColumnInfo(name = "customerRatingImage")
     @SerializedName("customerRatingImage")
     @Expose
     private String customerRatingImage;
+    @Ignore
     @SerializedName("categoryNode")
     @Expose
     private String categoryNode;
+    @Ignore
     @SerializedName("rhid")
     @Expose
     private String rhid;
+    @Ignore
     @SerializedName("bundle")
     @Expose
     private Boolean bundle;
+    @Ignore
     @SerializedName("clearance")
     @Expose
     private Boolean clearance;
+    @Ignore
     @SerializedName("preOrder")
     @Expose
     private Boolean preOrder;
+    @Ignore
     @SerializedName("stock")
     @Expose
     private String stock;
+
+    @Ignore
     @SerializedName("attributes")
     @Expose
     private Attributes attributes;
+    @Ignore
     @SerializedName("addToCartUrl")
     @Expose
     private String addToCartUrl;
+    @Ignore
     @SerializedName("affiliateAddToCartUrl")
     @Expose
     private String affiliateAddToCartUrl;
+    @Ignore
     @SerializedName("freeShippingOver35Dollars")
     @Expose
     private Boolean freeShippingOver35Dollars;
+    @Ignore
     @SerializedName("giftOptions")
     @Expose
     private GiftOptions giftOptions;
+    @Ignore
     @SerializedName("imageEntities")
     @Expose
     private List<ImageEntity> imageEntities = null;
+    @Ignore
     @SerializedName("offerType")
     @Expose
     private String offerType;
+    @Ignore
     @SerializedName("availableOnline")
     @Expose
     private Boolean availableOnline;
+    @Ignore
     @SerializedName("shipToStore")
     @Expose
     private Boolean shipToStore;
+    @Ignore
     @SerializedName("freeShipToStore")
     @Expose
     private Boolean freeShipToStore;
+    @Ignore
     @SerializedName("bestMarketplacePrice")
     @Expose
     private BestMarketplacePrice bestMarketplacePrice;
+    @Ignore
     @SerializedName("gender")
     @Expose
     private String gender;
+    @Ignore
     @SerializedName("age")
     @Expose
     private String age;
+    @Ignore
     @SerializedName("isTwoDayShippingEligible")
     @Expose
     private Boolean isTwoDayShippingEligible;
