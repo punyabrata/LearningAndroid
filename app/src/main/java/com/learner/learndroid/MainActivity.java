@@ -1,9 +1,13 @@
 package com.learner.learndroid;
 
+
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
+import android.os.Bundle;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "Activity on create");
 
+
         itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
         itemViewModel.getAllProducts().observe(this, new Observer<List<Product>>() {
             @Override
@@ -35,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
                 updateRecyclerView(products);
             }
         });
+
+
+        //This code has to be uncommented once DB is fully implemented.
+        //AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+        //AppDatabase.class, "database-name").build();
+        fetchData();
+    }
+
+    private void fetchData() {
+
     }
 
     private void updateRecyclerView(List<Product> products) {
