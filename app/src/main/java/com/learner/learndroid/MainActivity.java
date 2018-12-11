@@ -1,7 +1,7 @@
 package com.learner.learndroid;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -46,6 +46,15 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "Activity on create");
         initRecyclerViewItems();
         initRecyclerView();
+
+        //This code has to be uncommented once DB is fully implemented.
+        //AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+        //AppDatabase.class, "database-name").build();
+        fetchData();
+    }
+
+    private void fetchData() {
+
     }
 
     private void initRecyclerView() {
