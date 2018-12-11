@@ -1,4 +1,4 @@
-package com.learner.learndroid;
+package com.learner.learndroid.view;
 
 
 import android.arch.lifecycle.Observer;
@@ -6,12 +6,13 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import android.os.Bundle;
-
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
+import com.learner.learndroid.Product;
+import com.learner.learndroid.R;
 
 import java.util.List;
 

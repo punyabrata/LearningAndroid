@@ -1,4 +1,4 @@
-package com.learner.learndroid;
+package com.learner.learndroid.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.learner.learndroid.Product;
+import com.learner.learndroid.R;
 
 import java.util.List;
 

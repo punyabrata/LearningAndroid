@@ -1,10 +1,12 @@
-package com.learner.learndroid;
+package com.learner.learndroid.view;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+
+import com.learner.learndroid.Product;
 
 import java.util.ArrayList;
 import java.util.List;
