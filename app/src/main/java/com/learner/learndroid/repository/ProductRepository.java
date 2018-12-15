@@ -9,6 +9,7 @@ import com.learner.learndroid.entity.trending.Item;
 import com.learner.learndroid.entity.trending.WalmartTrending;
 import com.learner.learndroid.service.WalmartService;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,7 @@ public class ProductRepository {
             @Override
             public void onFailure(Call<WalmartTrending> call, Throwable t) {
                 Log.v(ProductRepository.class.getSimpleName(), "Network operation failed");
-                itemMutableLiveData.setValue(null);
+                itemMutableLiveData.setValue(new ArrayList<Item>());
             }
         });
 

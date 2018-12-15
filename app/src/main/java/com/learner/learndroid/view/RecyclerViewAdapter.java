@@ -1,4 +1,4 @@
-package com.learner.learndroid;
+package com.learner.learndroid.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide;
 import com.learner.learndroid.entity.trending.Item;
 
 import java.util.ArrayList;
+import com.learner.learndroid.R;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -35,13 +37,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      */
     private Context context;
 
-
     /**
      * Default constructor.
      *
      * @param context               Context.
      */
-    RecyclerViewAdapter(Context context) {
+    public RecyclerViewAdapter(Context context) {
         this.context = context;
     }
 
@@ -114,7 +115,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return productItems.size();
     }
 
-    void setItemData(List<Item> data) {
+    /**
+     * Sets item data
+     * @param data data
+     */
+    public void setItemData(List<Item> data) {
         productItems.clear();
         productItems.addAll(data);
     }
