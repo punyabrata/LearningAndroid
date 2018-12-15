@@ -1,4 +1,4 @@
-package com.learner.learndroid;
+package com.learner.learndroid.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,8 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.learner.learndroid.Product;
+import com.learner.learndroid.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -23,56 +25,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      */
     private static final String TAG = "RecyclerViewAdapter";
     /**
-     * List of product names.
-     */
-    private ArrayList<String> productNames;
-    /**
-     * List of product image URLs.
-     */
-    private ArrayList<String> productImageURLs;
-    /**
-     * List of product descriptions.
-     */
-    private ArrayList<String> productDescriptions;
-    /**
-     * List of product original prices.
-     */
-    private ArrayList<String> productOriginalPrices;
-    /**
-     * List of product deal prices.
-     */
-    private ArrayList<String> productDealPrices;
-    /**
-     * List of product you save texts.
-     */
-    private ArrayList<String> productYouSaveTexts;
-    /**
      * Context.
      */
     private Context context;
-
+    /**
+     * List of products.
+     */
+    private List<Product> products;
 
     /**
      * Default constructor.
      *
-     * @param productNames          Product names.
-     * @param productImageURLs      Product image urls.
-     * @param productDescriptions   Product description.
-     * @param productOriginalPrices Product original prices.
-     * @param productDealPrices     Product deal prices.
-     * @param productYouSaveTexts   Product you save texts.
-     * @param context               Context.
+     * @param products
+     * @param context  Context.
      */
-    public RecyclerViewAdapter(ArrayList<String> productNames, ArrayList<String> productImageURLs,
-                               ArrayList<String> productDescriptions, ArrayList<String> productOriginalPrices,
-                               ArrayList<String> productDealPrices, ArrayList<String> productYouSaveTexts,
-                               Context context) {
-        this.productNames = productNames;
-        this.productImageURLs = productImageURLs;
-        this.productDescriptions = productDescriptions;
-        this.productOriginalPrices = productOriginalPrices;
-        this.productDealPrices = productDealPrices;
-        this.productYouSaveTexts = productYouSaveTexts;
+    public RecyclerViewAdapter(List<Product> products, Context context) {
+        this.products = products;
         this.context = context;
     }
 
@@ -102,22 +70,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, final int i) {
         Log.d(TAG, "Binding view holder for position " + i);
 
-        recyclerViewHolder.productName.setText(productNames.get(i));
-        recyclerViewHolder.productDescription.setText(productDescriptions.get(i));
-        recyclerViewHolder.originalPrice.setText(productOriginalPrices.get(i));
-        recyclerViewHolder.dealPrice.setText(productDealPrices.get(i));
-        recyclerViewHolder.youSaveText.setText(productYouSaveTexts.get(i));
+        recyclerViewHolder.productName.setText(products.get(i).getProductName());
+        recyclerViewHolder.productDescription.setText(products.get(i).getProductDescription());
+        recyclerViewHolder.originalPrice.setText(products.get(i).getProductOriginalPrice());
+        recyclerViewHolder.dealPrice.setText(products.get(i).getProductDealPrice());
+        recyclerViewHolder.youSaveText.setText(products.get(i).getProductYouSaveText());
 
         Glide.with(context)
                 .asBitmap()
-                .load(productImageURLs.get(i))
+                .load(products.get(i).getProductImageURL())
                 .into(recyclerViewHolder.productImage);
 
         recyclerViewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Clicked on " + productNames.get(i));
-                Toast.makeText(context, productNames.get(i), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Clicked on " + products.get(i).getProductName());
+                Toast.makeText(context, products.get(i).getProductName(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -129,7 +97,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      */
     @Override
     public int getItemCount() {
-        return productNames.size();
+        return products.size();
     }
 
     /**
