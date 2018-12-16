@@ -8,6 +8,7 @@ public class Product {
     /**
      * Member variables.
      */
+    private String productID;
     private String productName;
     private String productImageURL;
     private String productDescription;
@@ -15,9 +16,11 @@ public class Product {
     private String productDealPrice;
     private String productYouSaveText;
 
+
     /**
      * Constructor.
      *
+     * @param productID            ID
      * @param productName          Name
      * @param productImageURL      URL
      * @param productDescription   Description
@@ -25,14 +28,24 @@ public class Product {
      * @param productDealPrice     Deal Price
      * @param productYouSaveText   You save text.
      */
-    public Product(String productName, String productImageURL, String productDescription,
+    public Product(String productID, String productName, String productImageURL, String productDescription,
                    String productOriginalPrice, String productDealPrice, String productYouSaveText) {
+        this.productID = productID;
         this.productName = productName;
         this.productImageURL = productImageURL;
         this.productDescription = productDescription;
         this.productOriginalPrice = productOriginalPrice;
         this.productDealPrice = productDealPrice;
         this.productYouSaveText = productYouSaveText;
+    }
+
+    /**
+     * Gets the product ID.
+     *
+     * @return String.
+     */
+    public String getProductID() {
+        return productID;
     }
 
     /**

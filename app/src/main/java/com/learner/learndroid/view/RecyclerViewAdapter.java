@@ -1,6 +1,7 @@
 package com.learner.learndroid.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -8,16 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.learner.learndroid.Product;
 import com.learner.learndroid.R;
 
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
     /**
@@ -32,6 +31,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * List of products.
      */
     private List<Product> products;
+    /**
+     * Product Id tag.
+     */
+    private static final String PRODUCT_ID = "PRODUCT_ID";
 
     /**
      * Default constructor.
@@ -85,7 +88,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Clicked on " + products.get(i).getProductName());
-                Toast.makeText(context, products.get(i).getProductName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra(PRODUCT_ID, products.get(i).getProductID());
+                context.startActivity(intent);
             }
         });
     }
@@ -108,7 +113,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          * View holder entries.
          */
         TextView productName;
-        CircleImageView productImage;
+        ImageView productImage;
         TextView productDescription;
         TextView originalPrice;
         TextView dealPrice;
@@ -124,7 +129,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             productName = itemView.findViewById(R.id.product_name);
-            productImage = itemView.findViewById(R.id.product_image);
+            productImage = itemView.findViewById(R.id.product_detail_image);
             productDescription = itemView.findViewById(R.id.product_description);
             originalPrice = itemView.findViewById(R.id.original_price);
             dealPrice = itemView.findViewById(R.id.deal_price);
