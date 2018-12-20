@@ -20,7 +20,7 @@ public class ItemViewModel extends AndroidViewModel {
     /**
      * Constructor.
      *
-     * @param application
+     * @param application The application instance.
      */
     public ItemViewModel(@NonNull Application application) {
         super(application);

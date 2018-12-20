@@ -27,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private ItemViewModel itemViewModel;
 
+    /**
+     * Activity on-create method.
+     *
+     * @param savedInstanceState Bundle.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,10 +58,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Updates the recycler view.
+     *
+     * @param products List of products.
+     */
     private void updateRecyclerView(List<Product> products) {
         Log.d(TAG, "Recycler view is being set up.");
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(products,this);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(products, this);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
