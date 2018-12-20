@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -59,7 +60,7 @@ public class DetailActivity extends AppCompatActivity {
         if (product == null)
             throw new NullPointerException("Product Detail Unavailable.");
         ImageView productImageView = findViewById(R.id.product_detail_image);
-        TextView ratingView = findViewById(R.id.ratingView);
+        RatingBar ratingView = findViewById(R.id.ratingView);
         TextView ratingText = findViewById(R.id.ratingText);
         TextView productName = findViewById(R.id.detail_product_name);
         TextView productOriginalPrice = findViewById(R.id.product_original_price);
@@ -71,7 +72,7 @@ public class DetailActivity extends AppCompatActivity {
                 .load(product.getProductImageURL())
                 .into(productImageView);
 
-        ratingView.setText("3 out of 5 *");
+        ratingView.setRating(3.0f);
         ratingText.setText("3/5");
         productName.setText(product.getProductName());
         productOriginalPrice.setText(product.getProductOriginalPrice());
