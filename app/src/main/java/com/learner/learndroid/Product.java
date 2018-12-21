@@ -12,10 +12,10 @@ public class Product {
     private String productName;
     private String productImageURL;
     private String productDescription;
-    private String productOriginalPrice;
-    private String productDealPrice;
+    private float productOriginalPrice;
+    private float productDealPrice;
     private String productYouSaveText;
-
+    private float rating;
 
     /**
      * Constructor.
@@ -27,9 +27,10 @@ public class Product {
      * @param productOriginalPrice Original Price
      * @param productDealPrice     Deal Price
      * @param productYouSaveText   You save text.
+     * @param rating               Product rating.
      */
     public Product(String productID, String productName, String productImageURL, String productDescription,
-                   String productOriginalPrice, String productDealPrice, String productYouSaveText) {
+                   float productOriginalPrice, float productDealPrice, String productYouSaveText, float rating) {
         this.productID = productID;
         this.productName = productName;
         this.productImageURL = productImageURL;
@@ -37,7 +38,9 @@ public class Product {
         this.productOriginalPrice = productOriginalPrice;
         this.productDealPrice = productDealPrice;
         this.productYouSaveText = productYouSaveText;
+        this.rating = rating;
     }
+
 
     /**
      * Gets the product ID.
@@ -78,18 +81,18 @@ public class Product {
     /**
      * Gets the product original price.
      *
-     * @return String.
+     * @return Float.
      */
-    public String getProductOriginalPrice() {
+    public float getProductOriginalPrice() {
         return productOriginalPrice;
     }
 
     /**
      * Gets the product deal price.
      *
-     * @return String.
+     * @return Float.
      */
-    public String getProductDealPrice() {
+    public float getProductDealPrice() {
         return productDealPrice;
     }
 
@@ -100,5 +103,13 @@ public class Product {
      */
     public String getProductYouSaveText() {
         return productYouSaveText;
+    }
+
+    /**
+     * Gets the product rating.
+     * @return Float.
+     */
+    public float getRating() {
+        return rating;
     }
 }
