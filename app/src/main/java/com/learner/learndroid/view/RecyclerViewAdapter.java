@@ -12,7 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.learner.learndroid.Product;
+import com.learner.learndroid.entity.trending.Item;
+
+import java.util.ArrayList;
 import com.learner.learndroid.R;
 
 import java.util.List;
@@ -24,23 +26,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * Tag for debugging.
      */
     private static final String TAG = "RecyclerViewAdapter";
+
+    /**
+     * List of products
+     */
+    private List<Item> productItems = new ArrayList<>();
+
     /**
      * Context.
      */
     private Context context;
-    /**
-     * List of products.
-     */
-    private List<Product> products;
 
     /**
      * Default constructor.
      *
-     * @param products
-     * @param context  Context.
+     * @param context               Context.
      */
-    public RecyclerViewAdapter(List<Product> products, Context context) {
-        this.products = products;
+    public RecyclerViewAdapter(Context context) {
         this.context = context;
     }
 
@@ -56,8 +58,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_list_item,
                 viewGroup, false);
-        RecyclerViewHolder viewHolder = new RecyclerViewHolder(view);
-        return viewHolder;
+        return new RecyclerViewHolder(view);
     }
 
     /**
@@ -70,22 +71,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, final int i) {
         Log.d(TAG, "Binding view holder for position " + i);
 
-        recyclerViewHolder.productName.setText(products.get(i).getProductName());
-        recyclerViewHolder.productDescription.setText(products.get(i).getProductDescription());
-        recyclerViewHolder.originalPrice.setText(products.get(i).getProductOriginalPrice());
-        recyclerViewHolder.dealPrice.setText(products.get(i).getProductDealPrice());
-        recyclerViewHolder.youSaveText.setText(products.get(i).getProductYouSaveText());
+        final Item item = productItems.get(i);
+        recyclerViewHolder.productName.setText(item.getName());
+        recyclerViewHolder.productDescription.setText(item.getShortDescription());
+        Double mrsp = 0d;
+        Double sale = 0d;
+        Double save;
+
+        if(item.getMsrp() != null) {
+            mrsp = item.getMsrp();
+        }
+
+        if(item.getSalePrice() != null) {
+            sale = item.getSalePrice();
+        }
+        save = mrsp - sale;
+
+        recyclerViewHolder.originalPrice.setText(String.valueOf(mrsp));
+        recyclerViewHolder.dealPrice.setText(String.valueOf(sale));
+        recyclerViewHolder.youSaveText.setText(String.valueOf(save));
 
         Glide.with(context)
                 .asBitmap()
-                .load(products.get(i).getProductImageURL())
+                .load(item.getThumbnailImage())
                 .into(recyclerViewHolder.productImage);
 
         recyclerViewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Clicked on " + products.get(i).getProductName());
-                Toast.makeText(context, products.get(i).getProductName(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Clicked on " + item.getName());
+                Toast.makeText(context, item.getName(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -97,7 +112,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      */
     @Override
     public int getItemCount() {
-        return products.size();
+        return productItems.size();
+    }
+
+    /**
+     * Sets item data
+     * @param data data
+     */
+    public void setItemData(List<Item> data) {
+        productItems.clear();
+        productItems.addAll(data);
     }
 
     /**
@@ -121,7 +145,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          *
          * @param itemView Item view.
          */
-        public RecyclerViewHolder(@NonNull View itemView) {
+        RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             productName = itemView.findViewById(R.id.product_name);
             productImage = itemView.findViewById(R.id.product_image);

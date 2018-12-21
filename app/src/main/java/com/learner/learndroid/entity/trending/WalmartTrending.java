@@ -9,16 +9,16 @@ public class WalmartTrending {
 
     @SerializedName("time")
     @Expose
-    private Integer time;
+    private Long time;
     @SerializedName("items")
     @Expose
     private List<Item> items = null;
 
-    public Integer getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(Integer time) {
+    public void setTime(Long time) {
         this.time = time;
     }
 
