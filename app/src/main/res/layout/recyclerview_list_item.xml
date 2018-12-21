@@ -53,24 +53,25 @@
         android:id="@+id/original_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Original Price"
+        android:background="@drawable/strike_through"
         android:textColor="#000"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/product_detail_image"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/product_description" />
 
     <TextView
         android:id="@+id/deal_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:text="Deal Price"
-        android:textColor="#000"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="#F00"
+        android:textSize="22sp"
+        app:layout_constraintStart_toEndOf="@+id/product_detail_image"
         app:layout_constraintTop_toBottomOf="@+id/product_description" />
 
     <TextView
