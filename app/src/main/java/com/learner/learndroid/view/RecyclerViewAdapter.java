@@ -17,6 +17,7 @@ import com.learner.learndroid.Product;
 import com.learner.learndroid.R;
 
 import java.util.List;
+import java.util.Locale;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
     /**
@@ -75,8 +76,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         recyclerViewHolder.productName.setText(products.get(i).getProductName());
         recyclerViewHolder.productDescription.setText(products.get(i).getProductDescription());
-        recyclerViewHolder.originalPrice.setText(products.get(i).getProductOriginalPrice());
-        recyclerViewHolder.dealPrice.setText(products.get(i).getProductDealPrice());
+
+        String originalPrice = String.format(Locale.US, "%.2f", products.get(i).getProductOriginalPrice());
+        String originalPriceText = context.getString(R.string.original_price_text, originalPrice);
+        recyclerViewHolder.originalPrice.setText(originalPriceText);
+
+        String dealPrice = String.format(Locale.US, "%.2f", products.get(i).getProductDealPrice());
+        String dealPriceText = context.getString(R.string.deal_price_text, dealPrice);
+        recyclerViewHolder.dealPrice.setText(dealPriceText);
+
         recyclerViewHolder.youSaveText.setText(products.get(i).getProductYouSaveText());
 
         Glide.with(context)

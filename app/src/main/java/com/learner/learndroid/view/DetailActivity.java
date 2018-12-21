@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.learner.learndroid.Product;
 import com.learner.learndroid.R;
 
+import java.util.Locale;
+
 public class DetailActivity extends AppCompatActivity {
     /**
      * Tag is debugging purpose.
@@ -72,11 +74,23 @@ public class DetailActivity extends AppCompatActivity {
                 .load(product.getProductImageURL())
                 .into(productImageView);
 
-        ratingView.setRating(3.0f);
-        ratingText.setText("3/5");
         productName.setText(product.getProductName());
-        productOriginalPrice.setText(product.getProductOriginalPrice());
-        productDealPrice.setText(product.getProductDealPrice());
+
+
+        String originalPrice = String.format(Locale.US, "%.2f", product.getProductOriginalPrice());
+        String originalPriceText = getApplicationContext().getString(R.string.original_price_text, originalPrice);
+        productOriginalPrice.setText(originalPriceText);
+
+        String dealPrice = String.format(Locale.US, "%.2f", product.getProductDealPrice());
+        String dealPriceText = getApplicationContext().getString(R.string.deal_price_text, dealPrice);
+        productDealPrice.setText(dealPriceText);
+
         productDescription.setText(product.getProductDescription());
+
+        float productRating = product.getRating();
+        String productRatingValue = String.valueOf(productRating);
+        String productRatingText = getApplicationContext().getString(R.string.product_rating_text, productRatingValue);
+        ratingView.setRating(productRating);
+        ratingText.setText(productRatingText);
     }
 }
