@@ -1,7 +1,5 @@
 package com.learner.learndroid.view;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +11,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.learner.learndroid.Product;
 import com.learner.learndroid.R;
+import com.learner.learndroid.entity.trending.Item;
 
 import java.util.Locale;
 
@@ -43,25 +41,19 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.item_detail);
         Log.d(TAG, "Detail activity onCreate.");
 
-        detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
-        String productId = getIntent().getStringExtra(PRODUCT_ID);
-        detailViewModel.getProductById(productId).observe(this, new Observer<Product>() {
-            @Override
-            public void onChanged(@Nullable Product product) {
-                updateDetailView(product);
-            }
-        });
+        Item item = (Item)getIntent().getSerializableExtra(PRODUCT_ID);
+        updateDetailView(item);
 
     }
 
     /**
      * Updates the detail view.
      *
-     * @param product Product object.
+     * @param item Product object.
      */
-    private void updateDetailView(Product product) {
+    private void updateDetailView(Item item) {
         Log.d(TAG, "Product Received.");
-        if (product == null)
+        if (item == null)
             throw new NullPointerException("Product Detail Unavailable.");
         ImageView productImageView = findViewById(R.id.product_detail_image);
         RatingBar ratingView = findViewById(R.id.ratingView);
@@ -74,23 +66,34 @@ public class DetailActivity extends AppCompatActivity {
 
         Glide.with(this)
                 .asBitmap()
-                .load(product.getProductImageURL())
+                .load(item.getLargeImage())
                 .into(productImageView);
 
-        productName.setText(product.getProductName());
+        productName.setText(item.getName());
 
 
-        String originalPrice = String.format(Locale.US, "%.2f", product.getProductOriginalPrice());
+        Double msrp = 0d;
+        Double sale = 0d;
+
+        if(item.getMsrp() != null) {
+            msrp = item.getMsrp();
+        }
+
+        if(item.getSalePrice() != null) {
+            sale = item.getSalePrice();
+        }
+
+        String originalPrice = String.format(Locale.US, "%.2f", msrp);
         String originalPriceText = getApplicationContext().getString(R.string.original_price_text, originalPrice);
         productOriginalPrice.setText(originalPriceText);
 
-        String dealPrice = String.format(Locale.US, "%.2f", product.getProductDealPrice());
+        String dealPrice = String.format(Locale.US, "%.2f", sale);
         String dealPriceText = getApplicationContext().getString(R.string.deal_price_text, dealPrice);
         productDealPrice.setText(dealPriceText);
 
-        productDescription.setText(product.getProductDescription());
+        productDescription.setText(item.getLongDescription());
 
-        float productRating = product.getRating();
+        float productRating = Float.valueOf(item.getCustomerRating());
         String productRatingValue = String.valueOf(productRating);
         String productRatingText = getApplicationContext().getString(R.string.product_rating_text, productRatingValue);
         ratingView.setRating(productRating);

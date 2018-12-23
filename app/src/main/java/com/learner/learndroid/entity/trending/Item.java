@@ -16,12 +16,12 @@ public class Item {
     @PrimaryKey
     @SerializedName("itemId")
     @Expose
-    private Integer itemId;
+    private Long itemId;
 
     @ColumnInfo(name="parentItemId")
     @SerializedName("parentItemId")
     @Expose
-    private Integer parentItemId;
+    private Long parentItemId;
 
     @SerializedName("name")
     @Expose
@@ -207,19 +207,19 @@ public class Item {
     @Expose
     private Boolean isTwoDayShippingEligible;
 
-    public Integer getItemId() {
+    public Long getItemId() {
         return itemId;
     }
 
-    public void setItemId(Integer itemId) {
+    public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
 
-    public Integer getParentItemId() {
+    public Long getParentItemId() {
         return parentItemId;
     }
 
-    public void setParentItemId(Integer parentItemId) {
+    public void setParentItemId(Long parentItemId) {
         this.parentItemId = parentItemId;
     }
 

@@ -4,18 +4,30 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
 
-import com.learner.learndroid.Product;
-import com.learner.learndroid.data.APIData;
+import com.learner.learndroid.entity.trending.Item;
+import com.learner.learndroid.repository.ProductRepository;
+
 
 import java.util.List;
 
+/**
+ * Class item view model.
+ */
 public class ItemViewModel extends AndroidViewModel {
     /**
      * Live data to hold the list of products.
      */
-    private MutableLiveData<List<Product>> liveData = new MutableLiveData<>();
+    private MutableLiveData<List<Item>> liveData = new MutableLiveData<>();
+
+    /**
+     * An instance of product repository.
+     */
+    private ProductRepository repository = null;
 
     /**
      * Constructor.
@@ -27,13 +39,32 @@ public class ItemViewModel extends AndroidViewModel {
     }
 
     /**
-     * Gets all the products.
+     * Sets product repository to the view model .
      *
-     * @return LiveData for the list of products.
+     * @param productRepository {@link ProductRepository}
      */
-    public LiveData<List<Product>> getAllProducts() {
-        liveData.setValue(APIData.getProducts());
+    public void setRepository(ProductRepository productRepository) {
+        this.repository = productRepository;
+    }
+
+
+    public LiveData<List<Item>> getAllProducts() {
+        if (liveData.getValue() == null) {
+            fetchData();
+        }
         return liveData;
     }
 
+    /**
+     * Fetches the data from
+     */
+    private void fetchData() {
+        Log.d(ItemViewModel.class.getSimpleName(), "Fetch Data");
+        repository.getTrendingItems().observeForever(new Observer<List<Item>>() {
+            @Override
+            public void onChanged(@Nullable List<Item> items) {
+                liveData.setValue(items);
+            }
+        });
+    }
 }

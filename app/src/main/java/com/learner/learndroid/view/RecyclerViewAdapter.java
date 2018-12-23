@@ -13,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.learner.learndroid.Product;
+import com.learner.learndroid.entity.trending.Item;
+
+import java.util.ArrayList;
 import com.learner.learndroid.R;
 
 import java.util.List;
@@ -24,27 +26,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * Tag for debugging.
      */
     private static final String TAG = "RecyclerViewAdapter";
+
     /**
-     * Context.
+     * List of products
      */
-    private Context context;
-    /**
-     * List of products.
-     */
-    private List<Product> products;
+    private List<Item> productItems = new ArrayList<>();
+
+
     /**
      * Product Id tag.
      */
     private static final String PRODUCT_ID = "PRODUCT_ID";
 
+    private Context context;
+
+
     /**
      * Default constructor.
      *
-     * @param products
-     * @param context  Context.
+     * @param context               Context.
      */
-    public RecyclerViewAdapter(List<Product> products, Context context) {
-        this.products = products;
+    public RecyclerViewAdapter(Context context) {
         this.context = context;
     }
 
@@ -60,8 +62,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_list_item,
                 viewGroup, false);
-        RecyclerViewHolder viewHolder = new RecyclerViewHolder(view);
-        return viewHolder;
+        return new RecyclerViewHolder(view);
     }
 
     /**
@@ -74,31 +75,49 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, final int i) {
         Log.d(TAG, "Binding view holder for position " + i);
 
-        recyclerViewHolder.productName.setText(products.get(i).getProductName());
-        recyclerViewHolder.productDescription.setText(products.get(i).getProductDescription());
+        final Item item = productItems.get(i);
 
-        String originalPrice = String.format(Locale.US, "%.2f", products.get(i).getProductOriginalPrice());
+        recyclerViewHolder.productName.setText(item.getName());
+        recyclerViewHolder.productDescription.setText(item.getShortDescription());
+
+        Double msrp = 0d;
+        Double sale = 0d;
+        Double save;
+
+        if(item.getMsrp() != null) {
+            msrp = item.getMsrp();
+        }
+
+        if(item.getSalePrice() != null) {
+            sale = item.getSalePrice();
+        }
+        save = msrp - sale;
+
+        String originalPrice = String.format(Locale.US, "%.2f", msrp);
         String originalPriceText = context.getString(R.string.original_price_text, originalPrice);
         recyclerViewHolder.originalPrice.setText(originalPriceText);
 
-        String dealPrice = String.format(Locale.US, "%.2f", products.get(i).getProductDealPrice());
+        String dealPrice = String.format(Locale.US, "%.2f", sale);
         String dealPriceText = context.getString(R.string.deal_price_text, dealPrice);
         recyclerViewHolder.dealPrice.setText(dealPriceText);
 
-        recyclerViewHolder.youSaveText.setText(products.get(i).getProductYouSaveText());
+        recyclerViewHolder.youSaveText.setText(String.valueOf(save));
 
         Glide.with(context)
                 .asBitmap()
-                .load(products.get(i).getProductImageURL())
+                .load(item.getThumbnailImage())
                 .into(recyclerViewHolder.productImage);
 
         recyclerViewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Clicked on " + products.get(i).getProductName());
+
+                Log.d(TAG, "Clicked on " + item.getName());
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(PRODUCT_ID, products.get(i).getProductID());
+                intent.putExtra(PRODUCT_ID, item);
                 context.startActivity(intent);
+
+
             }
         });
     }
@@ -110,7 +129,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      */
     @Override
     public int getItemCount() {
-        return products.size();
+        return productItems.size();
+    }
+
+    /**
+     * Sets item data
+     * @param data data
+     */
+    public void setItemData(List<Item> data) {
+        productItems.clear();
+        productItems.addAll(data);
     }
 
     /**
@@ -134,7 +162,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          *
          * @param itemView Item view.
          */
-        public RecyclerViewHolder(@NonNull View itemView) {
+        RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             productName = itemView.findViewById(R.id.product_name);
             productImage = itemView.findViewById(R.id.product_detail_image);
