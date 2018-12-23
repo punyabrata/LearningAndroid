@@ -13,11 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.learner.learndroid.R;
 import com.learner.learndroid.entity.trending.Item;
 
 import java.util.ArrayList;
-import com.learner.learndroid.R;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -114,7 +113,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 Log.d(TAG, "Clicked on " + item.getName());
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(PRODUCT_ID, item);
+                intent.putExtra(PRODUCT_ID, item.getName());
                 context.startActivity(intent);
 
 
