@@ -1,5 +1,6 @@
 package com.learner.learndroid.view;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ItemViewModel itemViewModel;
 
     /**
-     * Activity on-create method.
+     * The {@link Activity#onCreate(Bundle)} method.
      *
      * @param savedInstanceState Bundle.
      */
@@ -61,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
         itemViewModel.setRepository(productRepository);
     }
 
+    /**
+     * The {@link Activity#onResume()} method. We fetch all the products/items in this and sets the
+     * item data to the recycler view adapter and notify the adapter that the data has changed so
+     * that it can reload the data to the view.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -75,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Updates the recycler view.
+     * Initializes the recycler view.
      */
     private void initRecyclerView() {
         Log.d(TAG, "Recycler view is being set up.");

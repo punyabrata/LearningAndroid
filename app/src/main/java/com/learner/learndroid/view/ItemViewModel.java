@@ -12,13 +12,16 @@ import android.util.Log;
 import com.learner.learndroid.entity.trending.Item;
 import com.learner.learndroid.repository.ProductRepository;
 
-
 import java.util.List;
 
 /**
  * Class item view model.
  */
 public class ItemViewModel extends AndroidViewModel {
+    /**
+     * Tag for debugging.
+     */
+    private static final String TAG = "ItemViewModel";
     /**
      * Live data to hold the list of products.
      */
@@ -47,7 +50,10 @@ public class ItemViewModel extends AndroidViewModel {
         this.repository = productRepository;
     }
 
-
+    /**
+     * Gets the products using the {@link ItemViewModel#fetchData()} private method.
+     * @return LiveData of list of items.
+     */
     public LiveData<List<Item>> getAllProducts() {
         if (liveData.getValue() == null) {
             fetchData();
@@ -56,10 +62,10 @@ public class ItemViewModel extends AndroidViewModel {
     }
 
     /**
-     * Fetches the data from
+     * Fetches the data from the repository.
      */
     private void fetchData() {
-        Log.d(ItemViewModel.class.getSimpleName(), "Fetch Data");
+        Log.d(TAG, "Fetch Data");
         repository.getTrendingItems().observeForever(new Observer<List<Item>>() {
             @Override
             public void onChanged(@Nullable List<Item> items) {

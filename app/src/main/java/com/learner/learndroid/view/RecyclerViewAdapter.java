@@ -25,25 +25,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * Tag for debugging.
      */
     private static final String TAG = "RecyclerViewAdapter";
-
     /**
      * List of products
      */
     private List<Item> productItems = new ArrayList<>();
-
-
     /**
      * Product Id tag.
      */
     private static final String PRODUCT_ID = "PRODUCT_ID";
-
+    /**
+     * Context.
+     */
     private Context context;
-
 
     /**
      * Default constructor.
      *
-     * @param context               Context.
+     * @param context Context.
      */
     public RecyclerViewAdapter(Context context) {
         this.context = context;
@@ -83,11 +81,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Double sale = 0d;
         Double save;
 
-        if(item.getMsrp() != null) {
+        if (item.getMsrp() != null) {
             msrp = item.getMsrp();
         }
 
-        if(item.getSalePrice() != null) {
+        if (item.getSalePrice() != null) {
             sale = item.getSalePrice();
         }
         save = msrp - sale;
@@ -113,7 +111,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 Log.d(TAG, "Clicked on " + item.getName());
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(PRODUCT_ID, item.getName());
+                intent.putExtra(PRODUCT_ID, item.getItemId());
                 context.startActivity(intent);
 
 
@@ -133,6 +131,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     /**
      * Sets item data
+     *
      * @param data data
      */
     public void setItemData(List<Item> data) {
