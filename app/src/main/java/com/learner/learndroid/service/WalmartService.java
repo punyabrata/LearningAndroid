@@ -1,11 +1,13 @@
 package com.learner.learndroid.service;
 
+import com.learner.learndroid.entity.trending.Item;
 import com.learner.learndroid.entity.trending.WalmartTrending;
 
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
 /**
@@ -20,4 +22,7 @@ public interface WalmartService {
 
     @GET("trends")
     Call<WalmartTrending> getTrends(@QueryMap Map<String, String> map);
+
+    @GET("items/{itemid}")
+    Call<Item> getItem(@Path("itemid") String itemId, @QueryMap Map<String, String> map);
 }
