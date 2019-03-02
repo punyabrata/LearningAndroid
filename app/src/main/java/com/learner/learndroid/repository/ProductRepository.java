@@ -69,4 +69,31 @@ public class ProductRepository {
 
         return itemMutableLiveData;
     }
+
+    public LiveData<Item> getItem(String itemId) {
+        final MutableLiveData<Item> itemMutableLiveData = new MutableLiveData<>();
+
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("apiKey", Constants.WALMART_API_KEY);
+        map.put("format", "json");
+
+        walmartService.getItem(itemId, map).enqueue(new Callback<Item>() {
+            @Override
+            public void onResponse(Call<Item> call, Response<Item> response) {
+                Log.v(ProductRepository.class.getSimpleName(), "Success");
+                Item item = response.body();
+                if (item != null) {
+                    itemMutableLiveData.setValue(item);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Item> call, Throwable t) {
+                Log.v(ProductRepository.class.getSimpleName(), "Network operation failed");
+                itemMutableLiveData.setValue(new Item());
+            }
+        });
+
+        return itemMutableLiveData;
+    }
 }
