@@ -73,7 +73,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Log.d(TAG, "Binding view holder for position " + i);
 
         final Item item = productItems.get(i);
+        setViewHolderValues(recyclerViewHolder, item);
+        setViewHolderOnClickListener(recyclerViewHolder, item);
+    }
 
+    /**
+     * Sets the view holder on click listener.
+     *
+     * @param recyclerViewHolder View Holder.
+     * @param item               Item.
+     */
+    private void setViewHolderOnClickListener(@NonNull RecyclerViewHolder recyclerViewHolder, final Item item) {
+        recyclerViewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.d(TAG, "Clicked on " + item.getName());
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra(PRODUCT_ID, item.getItemId().toString());
+                context.startActivity(intent);
+
+
+            }
+        });
+    }
+
+    /**
+     * Sets the view holder component values.
+     *
+     * @param recyclerViewHolder View Holder
+     * @param item               Item.
+     */
+    private void setViewHolderValues(@NonNull RecyclerViewHolder recyclerViewHolder, Item item) {
         recyclerViewHolder.productName.setText(item.getName());
         recyclerViewHolder.productDescription.setText(item.getShortDescription());
 
@@ -98,25 +129,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         String dealPriceText = context.getString(R.string.deal_price_text, dealPrice);
         recyclerViewHolder.dealPrice.setText(dealPriceText);
 
-        recyclerViewHolder.youSaveText.setText(String.valueOf(save));
+        if (save > 0)
+            recyclerViewHolder.youSaveText.setText("You save " + String.valueOf(save));
+        else
+            recyclerViewHolder.youSaveText.setText("You have got the best price");
+
 
         Glide.with(context)
                 .asBitmap()
                 .load(item.getThumbnailImage())
                 .into(recyclerViewHolder.productImage);
-
-        recyclerViewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Log.d(TAG, "Clicked on " + item.getName());
-                Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(PRODUCT_ID, item.getItemId().toString());
-                context.startActivity(intent);
-
-
-            }
-        });
     }
 
     /**
