@@ -111,7 +111,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 Log.d(TAG, "Clicked on " + item.getName());
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(PRODUCT_ID, item.getItemId());
+                intent.putExtra(PRODUCT_ID, item.getItemId().toString());
                 context.startActivity(intent);
 
 

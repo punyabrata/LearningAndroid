@@ -1,5 +1,7 @@
 package com.learner.learndroid.view;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +15,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.learner.learndroid.R;
 import com.learner.learndroid.entity.trending.Item;
+import com.learner.learndroid.repository.ProductRepository;
+import com.learner.learndroid.service.WalmartService;
 
 import java.util.Locale;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailActivity extends AppCompatActivity {
     /**
@@ -41,9 +48,32 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.item_detail);
         Log.d(TAG, "Detail activity onCreate.");
 
-        Item item = (Item)getIntent().getSerializableExtra(PRODUCT_ID);
-        updateDetailView(item);
+        detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
 
+        //This code has to be uncommented once DB is fully implemented.
+        //AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+        //AppDatabase.class, "database-name").build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(WalmartService.TREND_BASE_POINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        WalmartService service = retrofit.create(WalmartService.class);
+        ProductRepository productRepository = new ProductRepository(service);
+        detailViewModel.setRepository(productRepository);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String itemId = getIntent().getStringExtra(PRODUCT_ID);
+        detailViewModel.getItem(itemId).observe(this, new Observer<Item>() {
+            @Override
+            public void onChanged(@Nullable Item item) {
+                updateDetailView(item);
+            }
+        });
     }
 
     /**
