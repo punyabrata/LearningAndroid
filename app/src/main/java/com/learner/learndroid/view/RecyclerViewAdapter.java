@@ -123,16 +123,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         String originalPrice = String.format(Locale.US, "%.2f", msrp);
         String originalPriceText = context.getString(R.string.original_price_text, originalPrice);
-        recyclerViewHolder.originalPrice.setText(originalPriceText);
+        if (msrp > sale) {
+            recyclerViewHolder.originalPrice.setText(originalPriceText);
+        } else {
+            recyclerViewHolder.originalPrice.setText("");
+        }
 
         String dealPrice = String.format(Locale.US, "%.2f", sale);
         String dealPriceText = context.getString(R.string.deal_price_text, dealPrice);
         recyclerViewHolder.dealPrice.setText(dealPriceText);
 
-        if (save > 0)
-            recyclerViewHolder.youSaveText.setText("You save " + String.valueOf(save));
-        else
+        if (save > 0) {
+            recyclerViewHolder.youSaveText.setText("You save " + String.format(Locale.US, "%.2f", save));
+        } else {
             recyclerViewHolder.youSaveText.setText("You have got the best price");
+        }
 
 
         Glide.with(context)
