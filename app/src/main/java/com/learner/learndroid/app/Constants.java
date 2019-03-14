@@ -1,4 +1,4 @@
-package com.learner.learndroid;
+package com.learner.learndroid.app;
 
 /**
  * Constants

@@ -23,10 +23,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/product_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+    <ImageView
+        android:id="@+id/product_detail_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/product_name" />
 
-    <TextView
+    <com.learner.learndroid.view.ExpandableTextView
         android:id="@+id/product_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -46,19 +46,20 @@
         android:textColor="#000"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/product_image"
+        app:layout_constraintStart_toEndOf="@+id/product_detail_image"
         app:layout_constraintTop_toBottomOf="@+id/product_name" />
 
     <TextView
         android:id="@+id/original_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Original Price"
+        android:background="@drawable/strike_through"
         android:textColor="#000"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/product_image"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/product_description" />
 
     <TextView
@@ -67,12 +68,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:text="Deal Price"
-        android:textColor="#000"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/original_price"
+        android:textColor="#F00"
+        android:textSize="22sp"
+        app:layout_constraintStart_toEndOf="@+id/product_detail_image"
         app:layout_constraintTop_toBottomOf="@+id/product_description" />
 
     <TextView
@@ -88,6 +87,6 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/product_image"
+        app:layout_constraintStart_toEndOf="@+id/product_detail_image"
         app:layout_constraintTop_toBottomOf="@+id/deal_price" />
 </android.support.constraint.ConstraintLayout>

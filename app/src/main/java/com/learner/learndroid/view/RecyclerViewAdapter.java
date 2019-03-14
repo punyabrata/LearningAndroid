@@ -1,6 +1,7 @@
 package com.learner.learndroid.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -8,30 +9,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.learner.learndroid.R;
 import com.learner.learndroid.entity.trending.Item;
 
 import java.util.ArrayList;
-import com.learner.learndroid.R;
-
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.Locale;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
     /**
      * Tag for debugging.
      */
     private static final String TAG = "RecyclerViewAdapter";
-
     /**
      * List of products
      */
     private List<Item> productItems = new ArrayList<>();
-
+    /**
+     * Product Id tag.
+     */
+    private static final String PRODUCT_ID = "PRODUCT_ID";
     /**
      * Context.
      */
@@ -40,7 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     /**
      * Default constructor.
      *
-     * @param context               Context.
+     * @param context Context.
      */
     public RecyclerViewAdapter(Context context) {
         this.context = context;
@@ -72,37 +73,77 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Log.d(TAG, "Binding view holder for position " + i);
 
         final Item item = productItems.get(i);
+        setViewHolderValues(recyclerViewHolder, item);
+        setViewHolderOnClickListener(recyclerViewHolder, item);
+    }
+
+    /**
+     * Sets the view holder on click listener.
+     *
+     * @param recyclerViewHolder View Holder.
+     * @param item               Item.
+     */
+    private void setViewHolderOnClickListener(@NonNull RecyclerViewHolder recyclerViewHolder, final Item item) {
+        recyclerViewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.d(TAG, "Clicked on " + item.getName());
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra(PRODUCT_ID, item.getItemId().toString());
+                context.startActivity(intent);
+
+
+            }
+        });
+    }
+
+    /**
+     * Sets the view holder component values.
+     *
+     * @param recyclerViewHolder View Holder
+     * @param item               Item.
+     */
+    private void setViewHolderValues(@NonNull RecyclerViewHolder recyclerViewHolder, Item item) {
         recyclerViewHolder.productName.setText(item.getName());
         recyclerViewHolder.productDescription.setText(item.getShortDescription());
-        Double mrsp = 0d;
+
+        Double msrp = 0d;
         Double sale = 0d;
         Double save;
 
-        if(item.getMsrp() != null) {
-            mrsp = item.getMsrp();
+        if (item.getMsrp() != null) {
+            msrp = item.getMsrp();
         }
 
-        if(item.getSalePrice() != null) {
+        if (item.getSalePrice() != null) {
             sale = item.getSalePrice();
         }
-        save = mrsp - sale;
+        save = msrp - sale;
 
-        recyclerViewHolder.originalPrice.setText(String.valueOf(mrsp));
-        recyclerViewHolder.dealPrice.setText(String.valueOf(sale));
-        recyclerViewHolder.youSaveText.setText(String.valueOf(save));
+        String originalPrice = String.format(Locale.US, "%.2f", msrp);
+        String originalPriceText = context.getString(R.string.original_price_text, originalPrice);
+        if (msrp > sale) {
+            recyclerViewHolder.originalPrice.setText(originalPriceText);
+        } else {
+            recyclerViewHolder.originalPrice.setText("");
+        }
+
+        String dealPrice = String.format(Locale.US, "%.2f", sale);
+        String dealPriceText = context.getString(R.string.deal_price_text, dealPrice);
+        recyclerViewHolder.dealPrice.setText(dealPriceText);
+
+        if (save > 0) {
+            recyclerViewHolder.youSaveText.setText("You save " + String.format(Locale.US, "%.2f", save));
+        } else {
+            recyclerViewHolder.youSaveText.setText("You have got the best price");
+        }
+
 
         Glide.with(context)
                 .asBitmap()
                 .load(item.getThumbnailImage())
                 .into(recyclerViewHolder.productImage);
-
-        recyclerViewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Clicked on " + item.getName());
-                Toast.makeText(context, item.getName(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     /**
@@ -117,6 +158,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     /**
      * Sets item data
+     *
      * @param data data
      */
     public void setItemData(List<Item> data) {
@@ -132,7 +174,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          * View holder entries.
          */
         TextView productName;
-        CircleImageView productImage;
+        ImageView productImage;
         TextView productDescription;
         TextView originalPrice;
         TextView dealPrice;
@@ -148,7 +190,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             productName = itemView.findViewById(R.id.product_name);
-            productImage = itemView.findViewById(R.id.product_image);
+            productImage = itemView.findViewById(R.id.product_detail_image);
             productDescription = itemView.findViewById(R.id.product_description);
             originalPrice = itemView.findViewById(R.id.original_price);
             dealPrice = itemView.findViewById(R.id.deal_price);
