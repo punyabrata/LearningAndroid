@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
 import com.learner.learndroid.app.Constants;
+import com.learner.learndroid.db.dao.ItemDao;
 import com.learner.learndroid.entity.trending.Item;
 import com.learner.learndroid.entity.trending.WalmartTrending;
 import com.learner.learndroid.service.WalmartService;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,18 +27,28 @@ import retrofit2.Response;
 
 public class ProductRepository {
 
+    private Executor executor;
+
+    private ItemDao itemDao;
+
     /**
      * A walmart service
      */
     private WalmartService walmartService;
 
+    private LiveData<List<Item>> itemLiveData = new MutableLiveData<>();
+
     /**
      * Constructs the {@link ProductRepository} object
      * @param walmartService an instance {@link WalmartService}
      */
-    public ProductRepository(WalmartService walmartService) {
+    public ProductRepository(ItemDao itemDao, WalmartService walmartService, Executor executor) {
+        this.itemDao = itemDao;
         this.walmartService = walmartService;
+        this.executor = executor;
     }
+
+
 
     /**
      * Gets trending items from the network.
