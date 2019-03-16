@@ -14,14 +14,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.learner.learndroid.R;
+import com.learner.learndroid.app.LearnDroidApplication;
 import com.learner.learndroid.entity.trending.Item;
-import com.learner.learndroid.repository.ProductRepository;
-import com.learner.learndroid.service.WalmartService;
 
 import java.util.Locale;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailActivity extends AppCompatActivity {
     /**
@@ -53,13 +49,9 @@ public class DetailActivity extends AppCompatActivity {
         //This code has to be uncommented once DB is fully implemented.
         //AppDatabase db = Room.databaseBuilder(getApplicationContext(),
         //AppDatabase.class, "database-name").build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WalmartService.TREND_BASE_POINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        WalmartService service = retrofit.create(WalmartService.class);
-        ProductRepository productRepository = new ProductRepository(service);
-        detailViewModel.setRepository(productRepository);
+
+        LearnDroidApplication application = (LearnDroidApplication)getApplication();
+        detailViewModel.setRepository(application.getRepository());
 
     }
 
