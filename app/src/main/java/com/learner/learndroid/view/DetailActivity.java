@@ -111,7 +111,7 @@ public class DetailActivity extends AppCompatActivity {
         String dealPriceText = getApplicationContext().getString(R.string.deal_price_text, dealPrice);
         productDealPrice.setText(dealPriceText);
 
-        productDescription.setText(item.getLongDescription());
+        productDescription.setText(item.getShortDescription());
 
         float productRating = Float.valueOf(item.getCustomerRating());
         String productRatingValue = String.valueOf(productRating);
