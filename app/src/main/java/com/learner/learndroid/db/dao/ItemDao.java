@@ -1,5 +1,6 @@
 package com.learner.learndroid.db.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -16,10 +17,10 @@ import java.util.List;
 public interface ItemDao {
 
     @Query("SELECT * FROM item")
-    List<Item> getAllItems();
+    LiveData<List<Item>> getAllItems();
 
     @Query("SELECT * FROM item WHERE itemId = :id")
-    List<Item> getItem(String id);
+    LiveData<Item> getItem(String id);
 
     @Insert
     void insert(Item item);
@@ -32,4 +33,7 @@ public interface ItemDao {
 
     @Delete
     void deleteAll(Item... items);
+
+    @Query("SELECT * FROM item LIMIT 1")
+    Item getAnyItem();
 }
