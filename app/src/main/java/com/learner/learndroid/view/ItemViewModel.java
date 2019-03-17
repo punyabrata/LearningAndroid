@@ -66,7 +66,7 @@ public class ItemViewModel extends AndroidViewModel {
      */
     private void fetchData() {
         Log.d(TAG, "Fetch Data");
-        repository.getTrendingItems().observeForever(new Observer<List<Item>>() {
+        repository.getItems().observeForever(new Observer<List<Item>>() {
             @Override
             public void onChanged(@Nullable List<Item> items) {
                 liveData.setValue(items);
