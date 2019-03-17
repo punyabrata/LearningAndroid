@@ -49,6 +49,7 @@ public class DetailViewModel extends AndroidViewModel {
 
     /**
      * Gets the products using the {@link DetailViewModel#fetchItem(String)} private method.
+     *
      * @return LiveData of an item.
      */
     public LiveData<Item> getItem(String itemId) {

@@ -45,16 +45,14 @@ public class DetailActivity extends AppCompatActivity {
         Log.d(TAG, "Detail activity onCreate.");
 
         detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
-
-        //This code has to be uncommented once DB is fully implemented.
-        //AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-        //AppDatabase.class, "database-name").build();
-
         LearnDroidApplication application = (LearnDroidApplication)getApplication();
         detailViewModel.setRepository(application.getRepository());
 
     }
 
+    /**
+     * Activity on-resume method.
+     */
     @Override
     protected void onResume() {
         super.onResume();

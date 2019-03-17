@@ -29,24 +29,39 @@ import retrofit2.Response;
  */
 
 public class ProductRepository {
-
+    /**
+     * Tag for debugging.
+     */
     private static final String TAG = ProductRepository.class.getSimpleName();
 
+    /**
+     * The executor to run async operation.
+     */
     private Executor executor;
 
+    /**
+     * The item DAO.
+     */
     private ItemDao itemDao;
 
     /**
-     * A walmart service
+     * The Walmart service.
      */
     private WalmartService walmartService;
 
+    /**
+     * A {@link LiveData} of list of items.
+     */
     private MutableLiveData<List<Item>> itemListLiveData = new MutableLiveData<>();
 
+    /**
+     * A {@link LiveData} of the current item.
+     */
     private MutableLiveData<Item> itemLiveData = new MutableLiveData<>();
 
     /**
      * Constructs the {@link ProductRepository} object
+     *
      * @param walmartService an instance {@link WalmartService}
      */
     public ProductRepository(ItemDao itemDao, WalmartService walmartService, Executor executor) {
@@ -55,6 +70,11 @@ public class ProductRepository {
         this.executor = executor;
     }
 
+    /**
+     * Gets all the items.
+     *
+     * @return List of items.
+     */
     public LiveData<List<Item>> getItems() {
         if (itemListLiveData.getValue() == null) {
             refreshItems();
@@ -64,8 +84,13 @@ public class ProductRepository {
         return itemListLiveData;
     }
 
+    /**
+     * Gets the item with the specified id.
+     *
+     * @param id The item id.
+     * @return The item.
+     */
     public LiveData<Item> getItem(String id) {
-        //itemLiveData.setValue(null);
         refreshItems();
         fetchItem(id);
         return itemLiveData;
@@ -84,6 +109,11 @@ public class ProductRepository {
         });
     }
 
+    /**
+     * Fetches the item with the supplied id from the database.
+     *
+     * @param id The item id.
+     */
     private void fetchItem(String id) {
         Log.d(TAG, "Fetch Item");
         itemDao.getItem(id).observeForever(new Observer<Item>() {
@@ -94,13 +124,16 @@ public class ProductRepository {
         });
     }
 
+    /**
+     * Checks if the database has got items.
+     * If not, calls the {@link #fetchTrendingItems()} method.
+     */
     private void refreshItems() {
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 Item item = itemDao.getAnyItem();
                 if (item == null) {
-                    //itemDao.insertAll(getTrendingItems().toArray(new Item[0]));
                     Log.v(ProductRepository.class.getSimpleName(), "Refresh Thread: " + Thread.currentThread().getName());
                     fetchTrendingItems();
                 }
@@ -108,6 +141,10 @@ public class ProductRepository {
         });
     }
 
+    /**
+     * Fetches trending items from the Walmart server.
+     * Updates the database if the fetch is successful.
+     */
     private void fetchTrendingItems() {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("apiKey", Constants.WALMART_API_KEY);
@@ -120,11 +157,7 @@ public class ProductRepository {
                 Log.v(ProductRepository.class.getSimpleName(), "Success");
                 Log.v(ProductRepository.class.getSimpleName(), "Fetch Thread: " + Thread.currentThread().getName());
                 WalmartTrending trending = response.body();
-                if(trending != null) {
-//                    itemMutableLiveData.setValue(trending.getItems());
-                    //trendIngItems.addAll(trending.getItems());
-
-                    //itemDao.insertAll(trending.getItems().toArray(new Item[0]));
+                if (trending != null) {
                     new InsertItemAsyncTask(itemDao).execute(trending.getItems().toArray(new Item[0]));
                 }
             }
@@ -132,23 +165,25 @@ public class ProductRepository {
             @Override
             public void onFailure(@NonNull Call<WalmartTrending> call, @NonNull Throwable t) {
                 Log.v(ProductRepository.class.getSimpleName(), "Network operation failed");
-//                itemMutableLiveData.setValue(new ArrayList<Item>());
             }
         });
     }
 
+    /**
+     * Async task to insert items to the database.
+     */
     private static class InsertItemAsyncTask extends AsyncTask<Item, Void, Void> {
 
-       private ItemDao itemDao;
+        private ItemDao itemDao;
 
-       private InsertItemAsyncTask(ItemDao itemDao) {
-           this.itemDao = itemDao;
-       }
+        private InsertItemAsyncTask(ItemDao itemDao) {
+            this.itemDao = itemDao;
+        }
 
         @Override
         protected Void doInBackground(Item... items) {
-           itemDao.insertAll(items);
-           return null;
+            itemDao.insertAll(items);
+            return null;
         }
     }
 

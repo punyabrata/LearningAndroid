@@ -45,11 +45,6 @@ public class MainActivity extends AppCompatActivity {
         initRecyclerView();
 
         itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
-
-        //This code has to be uncommented once DB is fully implemented.
-        //AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-        //AppDatabase.class, "database-name").build();
-
         LearnDroidApplication application = (LearnDroidApplication)getApplication();
         itemViewModel.setRepository(application.getRepository());
     }
