@@ -26,7 +26,6 @@ public class ItemViewModel extends AndroidViewModel {
      * Live data to hold the list of products.
      */
     private MutableLiveData<List<Item>> liveData = new MutableLiveData<>();
-
     /**
      * An instance of product repository.
      */
@@ -52,6 +51,7 @@ public class ItemViewModel extends AndroidViewModel {
 
     /**
      * Gets the products using the {@link ItemViewModel#fetchData()} private method.
+     *
      * @return LiveData of list of items.
      */
     public LiveData<List<Item>> getAllProducts() {
@@ -66,7 +66,7 @@ public class ItemViewModel extends AndroidViewModel {
      */
     private void fetchData() {
         Log.d(TAG, "Fetch Data");
-        repository.getTrendingItems().observeForever(new Observer<List<Item>>() {
+        repository.getItems().observeForever(new Observer<List<Item>>() {
             @Override
             public void onChanged(@Nullable List<Item> items) {
                 liveData.setValue(items);

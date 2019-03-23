@@ -11,14 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.learner.learndroid.R;
+import com.learner.learndroid.app.LearnDroidApplication;
 import com.learner.learndroid.entity.trending.Item;
-import com.learner.learndroid.repository.ProductRepository;
-import com.learner.learndroid.service.WalmartService;
 
 import java.util.List;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     /**
@@ -49,17 +45,8 @@ public class MainActivity extends AppCompatActivity {
         initRecyclerView();
 
         itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
-
-        //This code has to be uncommented once DB is fully implemented.
-        //AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-        //AppDatabase.class, "database-name").build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WalmartService.TREND_BASE_POINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        WalmartService service = retrofit.create(WalmartService.class);
-        ProductRepository productRepository = new ProductRepository(service);
-        itemViewModel.setRepository(productRepository);
+        LearnDroidApplication application = (LearnDroidApplication)getApplication();
+        itemViewModel.setRepository(application.getRepository());
     }
 
     /**

@@ -14,14 +14,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.learner.learndroid.R;
+import com.learner.learndroid.app.LearnDroidApplication;
 import com.learner.learndroid.entity.trending.Item;
-import com.learner.learndroid.repository.ProductRepository;
-import com.learner.learndroid.service.WalmartService;
 
 import java.util.Locale;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailActivity extends AppCompatActivity {
     /**
@@ -49,20 +45,14 @@ public class DetailActivity extends AppCompatActivity {
         Log.d(TAG, "Detail activity onCreate.");
 
         detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
-
-        //This code has to be uncommented once DB is fully implemented.
-        //AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-        //AppDatabase.class, "database-name").build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(WalmartService.TREND_BASE_POINT)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        WalmartService service = retrofit.create(WalmartService.class);
-        ProductRepository productRepository = new ProductRepository(service);
-        detailViewModel.setRepository(productRepository);
+        LearnDroidApplication application = (LearnDroidApplication)getApplication();
+        detailViewModel.setRepository(application.getRepository());
 
     }
 
+    /**
+     * Activity on-resume method.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -121,7 +111,7 @@ public class DetailActivity extends AppCompatActivity {
         String dealPriceText = getApplicationContext().getString(R.string.deal_price_text, dealPrice);
         productDealPrice.setText(dealPriceText);
 
-        productDescription.setText(item.getLongDescription());
+        productDescription.setText(item.getShortDescription());
 
         float productRating = Float.valueOf(item.getCustomerRating());
         String productRatingValue = String.valueOf(productRating);
