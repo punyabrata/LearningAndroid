@@ -159,7 +159,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          */
         @BindView(R.id.product_name)
         TextView productName;
-        @BindView(R.id.product_detail_image)
+        @BindView(R.id.product_image)
         ImageView productImage;
         @BindView(R.id.product_description)
         TextView productDescription;

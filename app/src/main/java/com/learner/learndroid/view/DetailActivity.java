@@ -19,6 +19,9 @@ import com.learner.learndroid.entity.trending.Item;
 
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
     /**
      * Tag is debugging purpose.
@@ -33,6 +36,30 @@ public class DetailActivity extends AppCompatActivity {
      */
     private DetailViewModel detailViewModel;
 
+    @BindView(R.id.product_detail_image)
+    ImageView productImageView;
+
+    @BindView(R.id.ratingView)
+    RatingBar ratingView;
+
+    @BindView(R.id.ratingText)
+    TextView ratingText;
+
+    @BindView(R.id.detail_product_name)
+    TextView productName;
+
+    @BindView(R.id.product_original_price)
+    TextView productOriginalPrice;
+
+    @BindView(R.id.product_sale_price)
+    TextView productDealPrice;
+
+    @BindView(R.id.product_detail_description)
+    TextView productDescription;
+
+    @BindView(R.id.done_button)
+    Button doneButton;
+
     /**
      * Activity on-create method.
      *
@@ -42,6 +69,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_detail);
+        ButterKnife.bind(this);
         Log.d(TAG, "Detail activity onCreate.");
 
         detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
@@ -75,14 +103,6 @@ public class DetailActivity extends AppCompatActivity {
         Log.d(TAG, "Product Received.");
         if (item == null)
             throw new NullPointerException("Product Detail Unavailable.");
-        ImageView productImageView = findViewById(R.id.product_detail_image);
-        RatingBar ratingView = findViewById(R.id.ratingView);
-        TextView ratingText = findViewById(R.id.ratingText);
-        TextView productName = findViewById(R.id.detail_product_name);
-        TextView productOriginalPrice = findViewById(R.id.product_original_price);
-        TextView productDealPrice = findViewById(R.id.product_sale_price);
-        TextView productDescription = findViewById(R.id.product_detail_description);
-        Button doneButton = findViewById(R.id.done_button);
 
         Glide.with(this)
                 .asBitmap()
