@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        Log.d(TAG, "Activity on create");
+        Log.d(TAG, "Main Activity on create.");
         initRecyclerView();
 
         itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);

@@ -116,9 +116,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         recyclerViewHolder.dealPrice.setText(dealPriceText);
 
         if (save > 0) {
-            recyclerViewHolder.youSaveText.setText("You save " + String.format(Locale.US, "%.2f", save));
+            String yourPrice = String.format(Locale.US, "%.2f", save);
+            String youSaveText = context.getString(R.string.you_save_text, yourPrice);
+            recyclerViewHolder.youSaveText.setText(youSaveText);
         } else {
-            recyclerViewHolder.youSaveText.setText("You have got the best price");
+            recyclerViewHolder.youSaveText.setText(context.getString(R.string.best_price_text));
         }
 
 
