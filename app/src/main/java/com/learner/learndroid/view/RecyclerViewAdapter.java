@@ -20,6 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
     /**
      * Tag for debugging.
@@ -74,29 +78,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         final Item item = productItems.get(i);
         setViewHolderValues(recyclerViewHolder, item);
-        setViewHolderOnClickListener(recyclerViewHolder, item);
-    }
-
-    /**
-     * Sets the view holder on click listener.
-     *
-     * @param recyclerViewHolder View Holder.
-     * @param item               Item.
-     */
-    private void setViewHolderOnClickListener(@NonNull RecyclerViewHolder recyclerViewHolder, final Item item) {
-        recyclerViewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Log.d(TAG, "Clicked on " + item.getName());
-                Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra(PRODUCT_ID, item.getItemId().toString());
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-
-
-            }
-        });
     }
 
     /**
@@ -174,12 +155,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         /**
          * View holder entries.
          */
+        @BindView(R.id.product_name)
         TextView productName;
+        @BindView(R.id.product_detail_image)
         ImageView productImage;
+        @BindView(R.id.product_description)
         TextView productDescription;
+        @BindView(R.id.original_price)
         TextView originalPrice;
+        @BindView(R.id.deal_price)
         TextView dealPrice;
+        @BindView(R.id.you_save_text)
         TextView youSaveText;
+        @BindView(R.id.parent_layout)
         ConstraintLayout parentLayout;
 
 
@@ -190,13 +178,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          */
         RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
-            productName = itemView.findViewById(R.id.product_name);
-            productImage = itemView.findViewById(R.id.product_detail_image);
-            productDescription = itemView.findViewById(R.id.product_description);
-            originalPrice = itemView.findViewById(R.id.original_price);
-            dealPrice = itemView.findViewById(R.id.deal_price);
-            youSaveText = itemView.findViewById(R.id.you_save_text);
-            parentLayout = itemView.findViewById(R.id.parent_layout);
+            ButterKnife.bind(this, itemView);
+        }
+
+        @OnClick(R.id.parent_layout)
+        void onclick() {
+            final Item item = productItems.get(getAdapterPosition());
+            Log.d(TAG, "Clicked on " + item.getName());
+            Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra(PRODUCT_ID, item.getItemId().toString());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
     }
 }
