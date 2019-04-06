@@ -183,6 +183,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             ButterKnife.bind(this, itemView);
         }
 
+        /**
+         * Item on-click method.
+         */
         @OnClick(R.id.parent_layout)
         void onclick() {
             final Item item = productItems.get(getAdapterPosition());

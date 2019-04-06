@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DetailActivity extends AppCompatActivity {
     /**
@@ -36,27 +37,51 @@ public class DetailActivity extends AppCompatActivity {
      */
     private DetailViewModel detailViewModel;
 
+    /**
+     * Product image.
+     */
     @BindView(R.id.product_detail_image)
     ImageView productImageView;
 
+    /**
+     * Product rating.
+     */
     @BindView(R.id.ratingView)
     RatingBar ratingView;
 
+    /**
+     * Rating text.
+     */
     @BindView(R.id.ratingText)
     TextView ratingText;
 
+    /**
+     * Product name.
+     */
     @BindView(R.id.detail_product_name)
     TextView productName;
 
+    /**
+     * Product original price.
+     */
     @BindView(R.id.product_original_price)
     TextView productOriginalPrice;
 
+    /**
+     * Product sale price.
+     */
     @BindView(R.id.product_sale_price)
     TextView productDealPrice;
 
+    /**
+     * Product description.
+     */
     @BindView(R.id.product_detail_description)
     TextView productDescription;
 
+    /**
+     * Done button.
+     */
     @BindView(R.id.done_button)
     Button doneButton;
 
@@ -92,6 +117,14 @@ public class DetailActivity extends AppCompatActivity {
                 updateDetailView(item);
             }
         });
+    }
+
+    /**
+     * Done button on-click method.
+     */
+    @OnClick(R.id.done_button)
+    public void handleDone() {
+        finish();
     }
 
     /**
@@ -138,12 +171,5 @@ public class DetailActivity extends AppCompatActivity {
         String productRatingText = getApplicationContext().getString(R.string.product_rating_text, productRatingValue);
         ratingView.setRating(productRating);
         ratingText.setText(productRatingText);
-
-        doneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 }
