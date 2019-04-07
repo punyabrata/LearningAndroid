@@ -5,4 +5,5 @@
     <string name="you_save_text">You save %1$s</string>
     <string name="best_price_text">You have got the best price</string>
     <string name="product_rating_text">%1$s out of 5</string>
+    <string name="done">Done</string>
 </resources>
