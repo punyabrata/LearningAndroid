@@ -8,7 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.learner.learndroid.R;
 import com.learner.learndroid.app.LearnDroidApplication;
@@ -42,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
 
     /**
+     * Action bar.
+     */
+    @BindView(R.id.main_toolbar)
+    Toolbar actionBar;
+
+    /**
      * The {@link Activity#onCreate(Bundle)} method.
      *
      * @param savedInstanceState Bundle.
@@ -52,11 +63,37 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         Log.d(TAG, "Main Activity on create.");
+
+        setSupportActionBar(actionBar);
+        getSupportActionBar().setTitle(R.string.main_activity_title);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         initRecyclerView();
 
         itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
-        LearnDroidApplication application = (LearnDroidApplication)getApplication();
+        LearnDroidApplication application = (LearnDroidApplication) getApplication();
         itemViewModel.setRepository(application.getRepository());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_grid:
+                Toast.makeText(this, "Grid selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menu_list:
+                Toast.makeText(this, "List selected", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
