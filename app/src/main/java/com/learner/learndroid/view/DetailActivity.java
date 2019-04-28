@@ -5,12 +5,15 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.learner.learndroid.R;
@@ -80,10 +83,10 @@ public class DetailActivity extends AppCompatActivity {
     TextView productDescription;
 
     /**
-     * Done button.
+     * Action bar.
      */
-    @BindView(R.id.done_button)
-    Button doneButton;
+    @BindView(R.id.detail_toolbar)
+    Toolbar actionBar;
 
     /**
      * Activity on-create method.
@@ -97,10 +100,28 @@ public class DetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Log.d(TAG, "Detail activity onCreate.");
 
+        setSupportActionBar(actionBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
-        LearnDroidApplication application = (LearnDroidApplication)getApplication();
+        LearnDroidApplication application = (LearnDroidApplication) getApplication();
         detailViewModel.setRepository(application.getRepository());
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
     }
 
     /**
@@ -117,14 +138,6 @@ public class DetailActivity extends AppCompatActivity {
                 updateDetailView(item);
             }
         });
-    }
-
-    /**
-     * Done button on-click method.
-     */
-    @OnClick(R.id.done_button)
-    public void handleDone() {
-        finish();
     }
 
     /**
@@ -148,11 +161,11 @@ public class DetailActivity extends AppCompatActivity {
         Double msrp = 0d;
         Double sale = 0d;
 
-        if(item.getMsrp() != null) {
+        if (item.getMsrp() != null) {
             msrp = item.getMsrp();
         }
 
-        if(item.getSalePrice() != null) {
+        if (item.getSalePrice() != null) {
             sale = item.getSalePrice();
         }
 

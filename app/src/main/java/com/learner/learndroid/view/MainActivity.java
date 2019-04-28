@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(actionBar);
         getSupportActionBar().setTitle(R.string.main_activity_title);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initRecyclerView();
 
