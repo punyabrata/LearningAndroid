@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/detailBackgroundColor">
 
     <include
         android:id="@+id/detail_toolbar"
@@ -19,19 +20,18 @@
         android:id="@+id/detail_scrollview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
-        android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/detail_toolbar"
+        android:layout_marginBottom="8dp"
+        android:scrollbars="none">
 
         <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/detailBackgroundColor">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/product_detail_image"
@@ -47,6 +47,7 @@
 
             <RatingBar
                 android:id="@+id/ratingView"
+                style="?android:attr/ratingBarStyleIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
