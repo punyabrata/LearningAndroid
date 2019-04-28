@@ -8,4 +8,5 @@
     <color name="colorRed">#F00</color>
     <color name="mainBackgroundColor">#DDD</color>
     <color name="itemBackgroundColor">@color/colorWhite</color>
+    <color name="detailBackgroundColor">@color/colorWhite</color>
 </resources>
