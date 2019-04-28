@@ -102,6 +102,7 @@ public class DetailActivity extends AppCompatActivity {
 
         setSupportActionBar(actionBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
         LearnDroidApplication application = (LearnDroidApplication) getApplication();
