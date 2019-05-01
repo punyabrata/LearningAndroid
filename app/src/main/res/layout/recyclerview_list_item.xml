@@ -44,7 +44,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/product_name" />
 
-        <com.learner.learndroid.view.ExpandableTextView
+        <TextView
             android:id="@+id/product_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -54,6 +54,8 @@
             android:text="Short Description"
             android:textColor="@color/colorBlack"
             android:textSize="16sp"
+            android:lines="3"
+            android:ellipsize="end"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/product_image"
             app:layout_constraintTop_toBottomOf="@+id/product_name" />
