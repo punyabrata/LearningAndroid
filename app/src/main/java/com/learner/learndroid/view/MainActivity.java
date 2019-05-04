@@ -16,6 +16,9 @@ import com.learner.learndroid.entity.trending.Item;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
     /**
      * Tag for debugging.
@@ -33,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
     private ItemViewModel itemViewModel;
 
     /**
+     * Recycler view.
+     */
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+
+    /**
      * The {@link Activity#onCreate(Bundle)} method.
      *
      * @param savedInstanceState Bundle.
@@ -41,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "Activity on create");
+        ButterKnife.bind(this);
+        Log.d(TAG, "Main Activity on create.");
         initRecyclerView();
 
         itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
@@ -72,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initRecyclerView() {
         Log.d(TAG, "Recycler view is being set up.");
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext());
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

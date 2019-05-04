@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:background="@color/colorPrimary"
-        android:text="Done"
+        android:text="@string/done"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -33,7 +33,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#EEE">
+            android:background="@color/detailBackgroundColor">
 
             <ImageView
                 android:id="@+id/product_detail_image"
@@ -63,7 +63,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="sample"
-                android:textColor="#000"
+                android:textColor="@color/colorBlack"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/product_detail_image" />
@@ -76,7 +76,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="Name of the product"
-                android:textColor="#000"
+                android:textColor="@color/colorBlack"
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +90,7 @@
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/strike_through"
                 android:text="Original price"
-                android:textColor="#000"
+                android:textColor="@color/colorBlack"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_product_name" />
@@ -102,7 +102,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Deal price"
-                android:textColor="#F00"
+                android:textColor="@color/colorRed"
                 android:textSize="22sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_product_name" />
@@ -115,7 +115,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="Product description"
-                android:textColor="#000"
+                android:textColor="@color/colorBlack"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
