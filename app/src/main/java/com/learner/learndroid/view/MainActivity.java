@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.main_activity_title);
 
         initRecyclerView();
+        setListType();
 
         itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
         LearnDroidApplication application = (LearnDroidApplication) getApplication();
@@ -85,10 +87,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_grid:
-                Toast.makeText(this, "Grid selected", Toast.LENGTH_SHORT).show();
+                setGridType();
                 return true;
             case R.id.menu_list:
-                Toast.makeText(this, "List selected", Toast.LENGTH_SHORT).show();
+                setListType();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -119,7 +121,17 @@ public class MainActivity extends AppCompatActivity {
     private void initRecyclerView() {
         Log.d(TAG, "Recycler view is being set up.");
         recyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext());
+    }
+
+    private void setListType() {
+        recyclerViewAdapter.setViewType(RecyclerViewAdapter.LIST_TYPE);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void setGridType() {
+        recyclerViewAdapter.setViewType(RecyclerViewAdapter.GRID_TYPE);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
     }
 }

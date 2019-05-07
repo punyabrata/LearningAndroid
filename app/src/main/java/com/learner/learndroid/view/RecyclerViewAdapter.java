@@ -3,7 +3,6 @@ package com.learner.learndroid.view;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,7 +24,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    /**
+     * Recycler view types.
+     */
+    public static final int LIST_TYPE = 0;
+    public static final int GRID_TYPE = 1;
     /**
      * Tag for debugging.
      */
@@ -42,6 +46,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * Context.
      */
     private Context context;
+    /**
+     * Recycler view type.
+     */
+    private int viewType;
 
     /**
      * Default constructor.
@@ -56,15 +64,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * Gets called when the view holder is created.
      *
      * @param viewGroup View group.
-     * @param i         View type.
+     * @param viewType  View type.
      * @return View holder object.
      */
     @NonNull
     @Override
-    public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_list_item,
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        View view;
+        switch (viewType) {
+            case LIST_TYPE:
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_list_item,
+                        viewGroup, false);
+                return new ListViewHolder(view);
+            case GRID_TYPE:
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_grid_item,
+                        viewGroup, false);
+                return new GridViewHolder(view);
+        }
+        view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_list_item,
                 viewGroup, false);
-        return new RecyclerViewHolder(view);
+        return new ListViewHolder(view);
     }
 
     /**
@@ -74,11 +93,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * @param i                  Item index.
      */
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewHolder recyclerViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder recyclerViewHolder, final int i) {
         Log.d(TAG, "Binding view holder for position " + i);
 
         final Item item = productItems.get(i);
-        setViewHolderValues(recyclerViewHolder, item);
+        switch (recyclerViewHolder.getItemViewType()) {
+            case LIST_TYPE:
+                setViewHolderValues((ListViewHolder) recyclerViewHolder, item);
+                break;
+            case GRID_TYPE:
+                setViewHolderValues((GridViewHolder) recyclerViewHolder, item);
+                break;
+        }
+
     }
 
     /**
@@ -87,9 +114,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
      * @param recyclerViewHolder View Holder
      * @param item               Item.
      */
-    private void setViewHolderValues(@NonNull RecyclerViewHolder recyclerViewHolder, Item item) {
-        recyclerViewHolder.productName.setText(item.getName());
-        recyclerViewHolder.productDescription.setText(item.getShortDescription());
+    private void setViewHolderValues(@NonNull IViewHolder recyclerViewHolder, Item item) {
+        recyclerViewHolder.setProductNameText(item.getName());
+        recyclerViewHolder.setProductDescriptionText(item.getShortDescription());
 
         Double msrp = 0d;
         Double sale = 0d;
@@ -107,28 +134,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         String originalPrice = String.format(Locale.US, "%.2f", msrp);
         String originalPriceText = context.getString(R.string.original_price_text, originalPrice);
         if (msrp > sale) {
-            recyclerViewHolder.originalPrice.setText(originalPriceText);
+            recyclerViewHolder.setOriginalPriceText(originalPriceText);
         } else {
-            recyclerViewHolder.originalPrice.setText("");
+            recyclerViewHolder.setOriginalPriceText("");
         }
 
         String dealPrice = String.format(Locale.US, "%.2f", sale);
         String dealPriceText = context.getString(R.string.deal_price_text, dealPrice);
-        recyclerViewHolder.dealPrice.setText(dealPriceText);
+        recyclerViewHolder.setDealPriceText(dealPriceText);
 
         if (save > 0) {
             String yourPrice = String.format(Locale.US, "%.2f", save);
             String youSaveText = context.getString(R.string.you_save_text, yourPrice);
-            recyclerViewHolder.youSaveText.setText(youSaveText);
+            recyclerViewHolder.setYouSaveText(youSaveText);
         } else {
-            recyclerViewHolder.youSaveText.setText(context.getString(R.string.best_price_text));
+            recyclerViewHolder.setYouSaveText(context.getString(R.string.best_price_text));
         }
 
 
         Glide.with(context)
                 .asBitmap()
                 .load(item.getThumbnailImage())
-                .into(recyclerViewHolder.productImage);
+                .into(recyclerViewHolder.getProductImage());
     }
 
     /**
@@ -139,6 +166,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return productItems.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return this.viewType;
     }
 
     /**
@@ -152,9 +184,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     /**
+     * Sets the view type.
+     *
+     * @param viewType The view type.
+     */
+    public void setViewType(int viewType) {
+        this.viewType = viewType;
+    }
+
+    /**
      * The view holder class for recycler view.
      */
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder {
+    public class ListViewHolder extends RecyclerView.ViewHolder implements IViewHolder {
         /**
          * View holder entries.
          */
@@ -179,7 +220,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
          *
          * @param itemView Item view.
          */
-        RecyclerViewHolder(@NonNull View itemView) {
+        ListViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
@@ -195,6 +236,102 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             intent.putExtra(PRODUCT_ID, item.getItemId().toString());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
+        }
+
+        @Override
+        public void setProductNameText(String text) {
+            this.productName.setText(text);
+        }
+
+        @Override
+        public void setProductDescriptionText(String text) {
+            this.productDescription.setText(text);
+        }
+
+        @Override
+        public void setOriginalPriceText(String text) {
+            this.originalPrice.setText(text);
+        }
+
+        @Override
+        public void setDealPriceText(String text) {
+            this.dealPrice.setText(text);
+        }
+
+        @Override
+        public void setYouSaveText(String text) {
+            this.youSaveText.setText(text);
+        }
+
+        @Override
+        public ImageView getProductImage() {
+            return this.productImage;
+        }
+    }
+
+    public class GridViewHolder extends RecyclerView.ViewHolder implements IViewHolder {
+        /**
+         * View holder entries.
+         */
+        @BindView(R.id.grid_product_name)
+        TextView productName;
+        @BindView(R.id.grid_product_image)
+        ImageView productImage;
+        @BindView(R.id.grid_original_price)
+        TextView originalPrice;
+        @BindView(R.id.grid_deal_price)
+        TextView dealPrice;
+        @BindView(R.id.grid_you_save_text)
+        TextView youSaveText;
+        @BindView(R.id.parent_grid_layout)
+        CardView parentLayout;
+
+        public GridViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        /**
+         * Item on-click method.
+         */
+        @OnClick(R.id.parent_grid_layout)
+        void onclick() {
+            final Item item = productItems.get(getAdapterPosition());
+            Log.d(TAG, "Clicked on " + item.getName());
+            Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra(PRODUCT_ID, item.getItemId().toString());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
+
+        @Override
+        public void setProductNameText(String text) {
+            this.productName.setText(text);
+        }
+
+        @Override
+        public void setProductDescriptionText(String text) {
+            // Not implemented for grid layout
+        }
+
+        @Override
+        public void setOriginalPriceText(String text) {
+            this.originalPrice.setText(text);
+        }
+
+        @Override
+        public void setDealPriceText(String text) {
+            this.dealPrice.setText(text);
+        }
+
+        @Override
+        public void setYouSaveText(String text) {
+            this.youSaveText.setText(text);
+        }
+
+        @Override
+        public ImageView getProductImage() {
+            return this.productImage;
         }
     }
 }
