@@ -11,6 +11,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -68,6 +69,7 @@ public class LearnDroidApplication extends Application {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(WalmartService.TREND_BASE_POINT)
                     .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
             walmartService = retrofit.create(WalmartService.class);
         }

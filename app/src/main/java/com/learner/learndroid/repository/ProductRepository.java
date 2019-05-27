@@ -1,12 +1,10 @@
 package com.learner.learndroid.repository;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
 import android.util.Log;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.learner.learndroid.app.Constants;
 import com.learner.learndroid.db.dao.ItemDao;
@@ -19,9 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Product Repository is responsible for fetching network data and storing the same into
@@ -33,11 +30,6 @@ public class ProductRepository {
      * Tag for debugging.
      */
     private static final String TAG = ProductRepository.class.getSimpleName();
-
-    /**
-     * The executor to run async operation.
-     */
-    private Executor executor;
 
     /**
      * The item DAO.
@@ -67,7 +59,6 @@ public class ProductRepository {
     public ProductRepository(ItemDao itemDao, WalmartService walmartService, Executor executor) {
         this.itemDao = itemDao;
         this.walmartService = walmartService;
-        this.executor = executor;
     }
 
     /**
@@ -77,10 +68,9 @@ public class ProductRepository {
      */
     public LiveData<List<Item>> getItems() {
         if (itemListLiveData.getValue() == null) {
-            refreshItems();
+            fetchTrendingItems();
             fetchData();
         }
-
         return itemListLiveData;
     }
 
@@ -91,7 +81,6 @@ public class ProductRepository {
      * @return The item.
      */
     public LiveData<Item> getItem(String id) {
-        refreshItems();
         fetchItem(id);
         return itemLiveData;
     }
@@ -101,12 +90,11 @@ public class ProductRepository {
      */
     private void fetchData() {
         Log.d(TAG, "Fetch Data");
-        itemDao.getAllItems().observeForever(new Observer<List<Item>>() {
-            @Override
-            public void onChanged(@Nullable List<Item> items) {
-                itemListLiveData.setValue(items);
-            }
-        });
+        itemDao.getAllItems()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(i -> itemListLiveData.setValue(i))
+                .subscribe();
     }
 
     /**
@@ -115,31 +103,17 @@ public class ProductRepository {
      * @param id The item id.
      */
     private void fetchItem(String id) {
-        Log.d(TAG, "Fetch Item");
-        itemDao.getItem(id).observeForever(new Observer<Item>() {
-            @Override
-            public void onChanged(@Nullable Item item) {
-                itemLiveData.setValue(item);
-            }
-        });
+        itemDao.getItem(id)
+                .subscribeOn(Schedulers.computation())
+                .doOnError(i -> { throw new IllegalStateException("Item does not exists"); })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(i -> itemLiveData.setValue(i))
+                .subscribe();
     }
 
-    /**
-     * Checks if the database has got items.
-     * If not, calls the {@link #fetchTrendingItems()} method.
-     */
-    private void refreshItems() {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                Item item = itemDao.getAnyItem();
-                if (item == null) {
-                    Log.v(ProductRepository.class.getSimpleName(), "Refresh Thread: " + Thread.currentThread().getName());
-                    fetchTrendingItems();
-                }
-            }
-        });
-    }
+
+
+
 
     /**
      * Fetches trending items from the Walmart server.
@@ -149,42 +123,15 @@ public class ProductRepository {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("apiKey", Constants.WALMART_API_KEY);
         map.put("format", "json");
-
-
-        walmartService.getTrends(map).enqueue(new Callback<WalmartTrending>() {
-            @Override
-            public void onResponse(@NonNull Call<WalmartTrending> call, @NonNull Response<WalmartTrending> response) {
-                Log.v(ProductRepository.class.getSimpleName(), "Success");
-                Log.v(ProductRepository.class.getSimpleName(), "Fetch Thread: " + Thread.currentThread().getName());
-                WalmartTrending trending = response.body();
-                if (trending != null) {
-                    new InsertItemAsyncTask(itemDao).execute(trending.getItems().toArray(new Item[0]));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<WalmartTrending> call, @NonNull Throwable t) {
-                Log.v(ProductRepository.class.getSimpleName(), "Network operation failed");
-            }
-        });
+        Log.i(TAG, "Fetch Remote data for all items");
+        walmartService.getTrends(map)
+                .subscribeOn(Schedulers.io())
+                .map(WalmartTrending::getItems)
+                .doOnNext(i -> {
+                    itemDao.deleteAll();
+                    itemDao.insertAll(i.toArray(new Item[0]));
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
-
-    /**
-     * Async task to insert items to the database.
-     */
-    private static class InsertItemAsyncTask extends AsyncTask<Item, Void, Void> {
-
-        private ItemDao itemDao;
-
-        private InsertItemAsyncTask(ItemDao itemDao) {
-            this.itemDao = itemDao;
-        }
-
-        @Override
-        protected Void doInBackground(Item... items) {
-            itemDao.insertAll(items);
-            return null;
-        }
-    }
-
 }

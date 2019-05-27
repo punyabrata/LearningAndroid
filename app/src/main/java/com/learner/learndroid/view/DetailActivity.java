@@ -1,16 +1,16 @@
 package com.learner.learndroid.view;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 import com.learner.learndroid.R;
@@ -166,7 +166,10 @@ public class DetailActivity extends AppCompatActivity {
 
         productDescription.setText(item.getShortDescription());
 
-        float productRating = Float.valueOf(item.getCustomerRating());
+        float productRating = 0.0f;
+        if(item.getCustomerRating() != null) {
+            productRating = Float.valueOf(item.getCustomerRating());
+        }
         String productRatingValue = String.valueOf(productRating);
         String productRatingText = getApplicationContext().getString(R.string.product_rating_text, productRatingValue);
         ratingView.setRating(productRating);

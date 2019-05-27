@@ -1,20 +1,15 @@
 package com.learner.learndroid.view;
 
 import android.app.Activity;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 
 import com.learner.learndroid.R;
 import com.learner.learndroid.app.LearnDroidApplication;
-import com.learner.learndroid.entity.trending.Item;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,14 +62,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        itemViewModel.getAllProducts().observe(this,
-                new Observer<List<Item>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Item> items) {
-                        recyclerViewAdapter.setItemData(items);
-                        recyclerViewAdapter.notifyDataSetChanged();
-                    }
-                });
+        itemViewModel.getAllProducts().observe(this, (items) -> {
+            recyclerViewAdapter.setItemData(items);
+            recyclerViewAdapter.notifyDataSetChanged();
+        });
     }
 
     /**
