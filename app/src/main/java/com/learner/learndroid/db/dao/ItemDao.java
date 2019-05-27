@@ -1,14 +1,14 @@
 package com.learner.learndroid.db.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.learner.learndroid.entity.trending.Item;
 
 import java.util.List;
+
+import io.reactivex.Flowable;
 
 /**
  * Item data access object to retrieve data.
@@ -21,7 +21,7 @@ public interface ItemDao {
      * @return
      */
     @Query("SELECT * FROM item")
-    LiveData<List<Item>> getAllItems();
+    Flowable<List<Item>> getAllItems();
 
     /**
      * Gets the item, from the {@link Item} table, by the id.
@@ -29,14 +29,7 @@ public interface ItemDao {
      * @return Item.
      */
     @Query("SELECT * FROM item WHERE itemId = :id")
-    LiveData<Item> getItem(String id);
-
-    /**
-     * Inserts an item into the {@link Item} table.
-     * @param item The item.
-     */
-    @Insert
-    void insert(Item item);
+    Flowable<Item> getItem(String id);
 
     /**
      * Inserts a list of items into the {@link Item} table.
@@ -46,29 +39,8 @@ public interface ItemDao {
     void insertAll(Item... items);
 
     /**
-     * Deletes the specified item from the {@link Item} table.
-     * @param item The item to delete.
-     */
-    @Delete
-    void delete(Item item);
-
-    /**
-     * Deletes a list of items from the {@link Item} table.
-     * @param item List of items.
-     */
-    @Delete
-    void deleteAll(Item... item);
-
-    /**
      * Deletes all items from the {@link Item} table.
      */
     @Query("DELETE FROM item")
     void deleteAll();
-
-    /**
-     * Gets any item from the {@link Item} table.
-     * @return An item.
-     */
-    @Query("SELECT * FROM item LIMIT 1")
-    Item getAnyItem();
 }
