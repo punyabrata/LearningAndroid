@@ -9,7 +9,7 @@ import com.learner.learndroid.R;
 /**
  * Expandable and collapsable text view.
  */
-public class ExpandableTextView extends android.support.v7.widget.AppCompatTextView implements View.OnClickListener {
+public class ExpandableTextView extends androidx.appcompat.widget.AppCompatTextView implements View.OnClickListener {
     /**
      * Max number of lines when collapsed.
      */
