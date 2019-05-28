@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.learner.learndroid.R;
 import com.learner.learndroid.app.LearnDroidApplication;
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(actionBar);
         getSupportActionBar().setTitle(R.string.main_activity_title);
 
-        initRecyclerView();
+        initAdapter();
         setListType();
 
         itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
@@ -116,10 +115,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Initializes the recycler view.
+     * Initializes the recycler view adapter.
      */
-    private void initRecyclerView() {
-        Log.d(TAG, "Recycler view is being set up.");
+    private void initAdapter() {
+        Log.d(TAG, "Recycler view adapter is being set up.");
         recyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext());
     }
 
