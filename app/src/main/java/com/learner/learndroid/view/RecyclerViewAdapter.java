@@ -134,9 +134,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         String originalPrice = String.format(Locale.US, "%.2f", msrp);
         String originalPriceText = context.getString(R.string.original_price_text, originalPrice);
         if (msrp > sale) {
+            recyclerViewHolder.showOriginalPrice();
             recyclerViewHolder.setOriginalPriceText(originalPriceText);
         } else {
-            recyclerViewHolder.setOriginalPriceText("");
+            recyclerViewHolder.hideOriginalPrice();
         }
 
         String dealPrice = String.format(Locale.US, "%.2f", sale);
@@ -249,6 +250,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         @Override
+        public void showOriginalPrice() {
+            this.originalPrice.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void hideOriginalPrice() {
+            this.originalPrice.setVisibility(View.GONE);
+        }
+
+        @Override
         public void setOriginalPriceText(String text) {
             this.originalPrice.setText(text);
         }
@@ -312,6 +323,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @Override
         public void setProductDescriptionText(String text) {
             // Not implemented for grid layout
+        }
+
+        @Override
+        public void showOriginalPrice() {
+            this.originalPrice.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void hideOriginalPrice() {
+            this.originalPrice.setVisibility(View.GONE);
         }
 
         @Override
