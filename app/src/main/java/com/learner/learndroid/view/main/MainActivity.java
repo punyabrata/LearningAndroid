@@ -1,4 +1,4 @@
-package com.learner.learndroid.view;
+package com.learner.learndroid.view.main;
 
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import com.learner.learndroid.R;
 import com.learner.learndroid.app.LearnDroidApplication;
 import com.learner.learndroid.entity.trending.Item;
+import com.learner.learndroid.view.adapter.RecyclerViewAdapter;
 
 import java.util.List;
 

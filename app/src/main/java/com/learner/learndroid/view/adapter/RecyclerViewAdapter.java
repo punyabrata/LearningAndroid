@@ -1,4 +1,4 @@
-package com.learner.learndroid.view;
+package com.learner.learndroid.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.learner.learndroid.R;
 import com.learner.learndroid.entity.trending.Item;
+import com.learner.learndroid.view.detail.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;

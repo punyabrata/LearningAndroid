@@ -1,4 +1,4 @@
-package com.learner.learndroid.view;
+package com.learner.learndroid.view.adapter;
 
 import android.widget.ImageView;
 

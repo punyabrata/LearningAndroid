@@ -1,4 +1,4 @@
-package com.learner.learndroid.view;
+package com.learner.learndroid.view.detail;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -12,20 +12,18 @@ import android.util.Log;
 import com.learner.learndroid.entity.trending.Item;
 import com.learner.learndroid.repository.ProductRepository;
 
-import java.util.List;
+public class DetailViewModel extends AndroidViewModel {
 
-/**
- * Class item view model.
- */
-public class ItemViewModel extends AndroidViewModel {
     /**
      * Tag for debugging.
      */
-    private static final String TAG = "ItemViewModel";
+    private static final String TAG = "DetailViewModel";
+
     /**
-     * Live data to hold the list of products.
+     * Live data to hold the product.
      */
-    private MutableLiveData<List<Item>> liveData = new MutableLiveData<>();
+    private MutableLiveData<Item> liveData = new MutableLiveData<>();
+
     /**
      * An instance of product repository.
      */
@@ -34,9 +32,9 @@ public class ItemViewModel extends AndroidViewModel {
     /**
      * Constructor.
      *
-     * @param application The application instance.
+     * @param application Application instance.
      */
-    public ItemViewModel(@NonNull Application application) {
+    public DetailViewModel(@NonNull Application application) {
         super(application);
     }
 
@@ -50,13 +48,13 @@ public class ItemViewModel extends AndroidViewModel {
     }
 
     /**
-     * Gets the products using the {@link ItemViewModel#fetchData()} private method.
+     * Gets the products using the {@link DetailViewModel#fetchItem(String)} private method.
      *
-     * @return LiveData of list of items.
+     * @return LiveData of an item.
      */
-    public LiveData<List<Item>> getAllProducts() {
+    public LiveData<Item> getItem(String itemId) {
         if (liveData.getValue() == null) {
-            fetchData();
+            fetchItem(itemId);
         }
         return liveData;
     }
@@ -64,12 +62,12 @@ public class ItemViewModel extends AndroidViewModel {
     /**
      * Fetches the data from the repository.
      */
-    private void fetchData() {
+    private void fetchItem(String id) {
         Log.d(TAG, "Fetch Data");
-        repository.getItems().observeForever(new Observer<List<Item>>() {
+        repository.getItem(id).observeForever(new Observer<Item>() {
             @Override
-            public void onChanged(@Nullable List<Item> items) {
-                liveData.setValue(items);
+            public void onChanged(@Nullable Item item) {
+                liveData.setValue(item);
             }
         });
     }
