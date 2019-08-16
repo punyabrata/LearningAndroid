@@ -54,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
     Toolbar actionBar;
 
     /**
+     * Item decors.
+     */
+    RecyclerView.ItemDecoration listItemDecoration;
+    RecyclerView.ItemDecoration gridItemDecoration;
+
+    /**
      * The {@link Activity#onCreate(Bundle)} method.
      *
      * @param savedInstanceState Bundle.
@@ -67,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(actionBar);
         getSupportActionBar().setTitle(R.string.main_activity_title);
+
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+        listItemDecoration = new ListSpacingItemDecoration(spacingInPixels);
+        gridItemDecoration = new GridSpacingItemDecoration(2, spacingInPixels);
 
         initAdapter();
         setListType();
@@ -127,11 +137,18 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewAdapter.setViewType(RecyclerViewAdapter.LIST_TYPE);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.invalidateItemDecorations();
+        recyclerView.removeItemDecoration(gridItemDecoration);
+        recyclerView.addItemDecoration(listItemDecoration);
+
     }
 
     private void setGridType() {
         recyclerViewAdapter.setViewType(RecyclerViewAdapter.GRID_TYPE);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.invalidateItemDecorations();
+        recyclerView.removeItemDecoration(listItemDecoration);
+        recyclerView.addItemDecoration(gridItemDecoration);
     }
 }

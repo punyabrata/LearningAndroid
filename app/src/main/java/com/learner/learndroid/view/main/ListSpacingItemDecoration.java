@@ -5,10 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+public class ListSpacingItemDecoration extends RecyclerView.ItemDecoration {
     private int space;
 
-    public SpacesItemDecoration(int space) {
+    public ListSpacingItemDecoration(int space) {
         this.space = space;
     }
 
