@@ -6,4 +6,7 @@
     <string name="best_price_text">You have got the best price</string>
     <string name="product_rating_text">%1$s out of 5</string>
     <string name="done">Done</string>
+    <string name="main_activity_title">Deals You May Like</string>
+    <string name="main_activity_grid">Grid</string>
+    <string name="main_activity_list">List</string>
 </resources>
