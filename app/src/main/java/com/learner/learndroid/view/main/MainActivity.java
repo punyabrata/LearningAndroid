@@ -60,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView.ItemDecoration gridItemDecoration;
 
     /**
+     * Menu items.
+     */
+    MenuItem gridOnItem;
+    MenuItem gridOffItem;
+
+    /**
      * The {@link Activity#onCreate(Bundle)} method.
      *
      * @param savedInstanceState Bundle.
@@ -78,29 +84,38 @@ public class MainActivity extends AppCompatActivity {
         listItemDecoration = new ListSpacingItemDecoration(spacingInPixels);
         gridItemDecoration = new GridSpacingItemDecoration(2, spacingInPixels);
 
-        initAdapter();
-        setListType();
-
         itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
         LearnDroidApplication application = (LearnDroidApplication) getApplication();
         itemViewModel.setRepository(application.getRepository());
+
+        initAdapter();
+        setViewType(ViewType.LIST);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_toolbar_menu, menu);
+        gridOnItem = menu.findItem(R.id.menu_grid);
+        gridOffItem = menu.findItem(R.id.menu_list);
+        showGridOption(true);
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_grid:
-                setGridType();
+                setViewType(ViewType.GRID);
+                showGridOption(false);
                 return true;
             case R.id.menu_list:
-                setListType();
+                setViewType(ViewType.LIST);
+                showGridOption(true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -115,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         itemViewModel.getAllProducts().observe(this,
                 new Observer<List<Item>>() {
                     @Override
@@ -133,22 +149,31 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewAdapter = new RecyclerViewAdapter(getApplicationContext());
     }
 
-    private void setListType() {
-        recyclerViewAdapter.setViewType(RecyclerViewAdapter.LIST_TYPE);
+    /**
+     * Sets view type.
+     * @param type List vs Grid.
+     */
+    private void setViewType(ViewType type) {
+        recyclerViewAdapter.setViewType(type == ViewType.GRID ? RecyclerViewAdapter.GRID_TYPE : RecyclerViewAdapter.LIST_TYPE);
         recyclerView.setAdapter(recyclerViewAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView.LayoutManager layoutManager;
+        if (type == ViewType.GRID) {
+            layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        } else {
+            layoutManager = new LinearLayoutManager(this);
+        }
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.invalidateItemDecorations();
-        recyclerView.removeItemDecoration(gridItemDecoration);
-        recyclerView.addItemDecoration(listItemDecoration);
-
+        recyclerView.removeItemDecoration(type == ViewType.GRID ? listItemDecoration : gridItemDecoration);
+        recyclerView.addItemDecoration(type == ViewType.GRID ? gridItemDecoration : listItemDecoration);
     }
 
-    private void setGridType() {
-        recyclerViewAdapter.setViewType(RecyclerViewAdapter.GRID_TYPE);
-        recyclerView.setAdapter(recyclerViewAdapter);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.invalidateItemDecorations();
-        recyclerView.removeItemDecoration(listItemDecoration);
-        recyclerView.addItemDecoration(gridItemDecoration);
+    /**
+     * Show Grid vs List menu option.
+     * @param show If true, show grid option. Show list option otherwise.
+     */
+    private void showGridOption(boolean show) {
+        gridOnItem.setVisible(show);
+        gridOffItem.setVisible(!show);
     }
 }

@@ -20,7 +20,7 @@ public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(view);
         int spanIndex = ((StaggeredGridLayoutManager.LayoutParams) (view.getLayoutParams())).getSpanIndex();
-        
+
         if (spanIndex == 0) {
             outRect.left = spacing;
         }
